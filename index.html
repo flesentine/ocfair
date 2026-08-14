@@ -4,43 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
-<title>Fair Night — Robust Live V13</title>
+<title>Fair Night — Manual Arrival V14</title>
 <style>
-:root{
-  --bg:#09090e;--panel:#14141c;--panel2:#1c1c27;--line:rgba(255,255,255,.10);
-  --text:#fffaf4;--muted:#aaa7b6;--pink:#ff4f86;--gold:#ffd15d;--green:#82efaa;
-  --cyan:#69e0ff;--violet:#a998ff;--danger:#ff8d78;--radius:22px;
-}
-*{box-sizing:border-box}html{scroll-behavior:smooth;touch-action:manipulation}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"SF Pro Display","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:92px}button,a{font:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button{cursor:pointer}.app{max-width:720px;margin:auto;min-height:100vh}.topbar{position:sticky;top:0;z-index:30;height:58px;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:rgba(9,9,14,.93);border-bottom:1px solid rgba(255,255,255,.06);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:10px}.logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--gold));display:grid;place-items:center;font-size:19px}.brand b{display:block;font-size:14px;letter-spacing:-.01em}.brand small{display:block;font-size:10px;color:var(--muted);margin-top:1px}.clock{text-align:right}.clock b{display:block;font-size:14px}.clock small{display:block;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em}.view{display:none}.view.active{display:block}.pad{padding:12px 14px 0}.statusStrip{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:16px;background:linear-gradient(110deg,rgba(255,209,93,.14),rgba(255,79,134,.08));border:1px solid rgba(255,209,93,.18);margin-bottom:10px}.statusStrip b{font-size:12px}.statusStrip span{font-size:10px;color:#d8d3c8}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(130,239,170,.10);flex:0 0 auto}.statusCopy{flex:1}.focusCard{position:relative;overflow:hidden;border-radius:28px;border:1px solid var(--line);background:linear-gradient(145deg,#191923,#111118);padding:18px;box-shadow:0 18px 44px rgba(0,0,0,.26)}.focusCard:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-70px;top:-80px;background:radial-gradient(circle,rgba(255,79,134,.22),transparent 67%);pointer-events:none}.eyebrow{font-size:10px;color:var(--cyan);text-transform:uppercase;letter-spacing:.14em;font-weight:950}.focusTop{display:flex;justify-content:space-between;gap:14px;align-items:start}.focusText{min-width:0}.focusCard h1{font-size:31px;line-height:1.02;letter-spacing:-.045em;margin:6px 0 6px}.focusCard p{font-size:13px;line-height:1.45;color:var(--muted);margin:0;max-width:500px}.where{display:inline-flex;margin-top:10px;padding:7px 9px;border-radius:999px;background:#242431;border:1px solid var(--line);font-size:10px;font-weight:850;color:#e7e3eb}.count{min-width:76px;text-align:right;position:relative;z-index:1}.count b{display:block;color:var(--gold);font-size:24px;letter-spacing:-.04em}.count span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.10em}.progress{height:6px;background:#292934;border-radius:99px;margin-top:15px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--gold));border-radius:inherit;transition:width .25s}.actionGrid{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:8px;margin-top:13px}.action{min-height:51px;border-radius:16px;border:1px solid var(--line);background:#23232f;color:#fff;font-weight:900;font-size:11px;padding:8px}.action.primary{background:linear-gradient(115deg,var(--pink),#ff775a);border:0;box-shadow:0 9px 24px rgba(255,79,134,.18)}.action.done{background:rgba(130,239,170,.11);color:#bff8d2}.prepList{display:grid;gap:8px;margin-top:14px}.prep{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:15px;background:#1c1c27;border:1px solid var(--line)}.prep i{width:28px;height:28px;border-radius:9px;background:#272735;display:grid;place-items:center;font-style:normal}.prep b{font-size:12px}.prep span{display:block;color:var(--muted);font-size:10px;margin-top:1px}.prep button{margin-left:auto;width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:#252532;color:#777386;font-weight:900}.prep button.done{background:var(--green);color:#0a3219}.quickRow{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.quick{min-height:64px;border:1px solid var(--line);background:var(--panel);border-radius:18px;color:#e7e3ed;font-weight:850;font-size:10px}.quick span{display:block;font-size:22px;margin-bottom:4px}.section{padding:18px 14px 0}.sectionHead{display:flex;justify-content:space-between;align-items:end;margin:0 2px 10px}.sectionHead h2{font-size:20px;margin:0;letter-spacing:-.03em}.sectionHead span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.upcoming{display:grid;gap:8px}.upRow{display:grid;grid-template-columns:58px 1fr auto;gap:10px;align-items:center;padding:12px;border-radius:17px;background:var(--panel);border:1px solid var(--line)}.upRow.now{border-color:rgba(255,209,93,.30);background:linear-gradient(110deg,rgba(255,209,93,.07),var(--panel))}.upTime{font-size:11px;font-weight:950;color:var(--gold)}.upRow b{font-size:13px;display:block}.upRow span{font-size:10px;color:var(--muted);display:block;margin-top:2px}.upRow .arrow{font-size:18px;color:#686574}.timeline{display:grid;gap:8px}.event{display:grid;grid-template-columns:58px 1fr 34px;gap:10px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;position:relative}.event.current{border-color:rgba(255,209,93,.30);background:#191922}.eventTime{font-size:11px;font-weight:950;color:var(--gold);padding-top:1px}.event h3{font-size:14px;margin:0 0 4px}.event p{font-size:10.5px;line-height:1.4;color:var(--muted);margin:0}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.tag{font-size:8.5px;font-weight:850;padding:4px 6px;border-radius:999px;background:#252531;color:#c7c3cf}.tag.shy{background:rgba(169,152,255,.12);color:#d9d0ff}.tag.ati{background:rgba(130,239,170,.11);color:#bdf7d0}.event .eventDone{width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:#242430;color:#777386;font-weight:900}.event .eventDone.done{background:var(--green);color:#0a3219}.collapseBtn{width:100%;min-height:47px;border:1px solid var(--line);background:#15151e;border-radius:15px;color:#d8d4de;font-weight:850;margin-top:8px}.missionHero{border-radius:24px;padding:17px;background:linear-gradient(145deg,rgba(169,152,255,.15),rgba(255,79,134,.07));border:1px solid rgba(169,152,255,.20)}.missionHero h2{font-size:23px;margin:5px 0 6px}.missionHero p{font-size:11.5px;line-height:1.45;color:#c4bfcc;margin:0}.scoreLine{display:flex;align-items:center;gap:10px;margin-top:14px}.ring{width:54px;height:54px;border-radius:50%;background:conic-gradient(var(--violet) 0deg,#2a2935 0deg);position:relative;display:grid;place-items:center}.ring:after{content:"";position:absolute;inset:7px;background:#171721;border-radius:50%}.ring b{z-index:1;font-size:12px}.scoreCopy b{display:block;font-size:12px}.scoreCopy span{display:block;font-size:10px;color:var(--muted);margin-top:2px}.missions{display:grid;gap:8px;margin-top:12px}.mission{display:flex;align-items:center;gap:10px;padding:11px;border-radius:16px;background:#171721;border:1px solid var(--line)}.mi{width:36px;height:36px;border-radius:11px;background:#252532;display:grid;place-items:center;font-size:19px}.mc{flex:1}.mc b{display:block;font-size:12px}.mc span{display:block;font-size:9.5px;color:var(--muted);margin-top:2px}.mission button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:#242430;color:#777386;font-weight:900}.mission button.done{background:var(--violet);color:#fff}.card{border-radius:19px;background:var(--panel);border:1px solid var(--line);padding:14px}.card h3{font-size:14px;margin:0 0 5px}.card p{font-size:10.5px;line-height:1.42;color:var(--muted);margin:0}.safe{color:var(--green)!important;margin-top:8px!important;font-weight:750}.warn{color:#ffc19c!important;margin-top:8px!important}.cardGrid{display:grid;gap:8px}.seg{display:grid;grid-template-columns:repeat(3,1fr);padding:4px;background:#111117;border:1px solid var(--line);border-radius:15px;gap:3px}.seg button{min-height:39px;border:0;border-radius:11px;background:transparent;color:var(--muted);font-weight:850;font-size:10px}.seg button.active{background:#292936;color:#fff}.infoList{display:grid;gap:8px}.info{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;text-decoration:none;padding:11px 12px;border-radius:16px;background:var(--panel);border:1px solid var(--line)}.info i{width:36px;height:36px;border-radius:11px;background:#242430;display:grid;place-items:center;font-style:normal}.info b{font-size:12px;display:block}.info span{font-size:9.5px;color:var(--muted);display:block;margin-top:2px}.info em{font-style:normal;color:#6e6a78;font-size:17px}.bottom{position:fixed;z-index:40;left:0;right:0;bottom:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(9,9,14,.94);border-top:1px solid var(--line);backdrop-filter:blur(20px)}.nav{max-width:700px;margin:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:3px}.nav button{min-height:54px;border:0;border-radius:14px;background:transparent;color:#777483;font-size:9px;font-weight:900}.nav button span{display:block;font-size:18px;margin-bottom:3px}.nav button.active{background:#1b1b25;color:#fff}.sheetBack{position:fixed;z-index:80;inset:0;background:rgba(0,0,0,.60);opacity:0;pointer-events:none;transition:.18s}.sheetBack.show{opacity:1;pointer-events:auto}.sheet{position:absolute;left:0;right:0;bottom:0;max-height:78vh;overflow:auto;background:#15151e;border-radius:26px 26px 0 0;border-top:1px solid var(--line);padding:9px 14px calc(20px + env(safe-area-inset-bottom));transform:translateY(100%);transition:.22s}.sheetBack.show .sheet{transform:translateY(0)}.handle{width:40px;height:5px;border-radius:99px;background:#393844;margin:0 auto 14px}.sheet h2{font-size:22px;margin:0 0 5px}.sheet>p{font-size:11px;color:var(--muted);line-height:1.45;margin:0 0 12px}.choice{width:100%;text-align:left;border:1px solid var(--line);border-radius:16px;background:#1f1f2a;color:#fff;padding:13px;margin-bottom:8px}.choice b{display:block;font-size:12px}.choice span{display:block;font-size:10px;color:var(--muted);line-height:1.4;margin-top:3px}.choice strong{color:var(--gold)}.toast{position:fixed;z-index:90;left:50%;bottom:85px;transform:translate(-50%,18px);opacity:0;background:#fff;color:#111118;padding:10px 14px;border-radius:999px;font-size:10px;font-weight:900;transition:.18s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}.tiny{font-size:9.5px;color:#777482;line-height:1.45;margin:10px 2px 0}.hide{display:none!important}
-@media(min-width:620px){.cardGrid.two{grid-template-columns:1fr 1fr}.focusCard{padding:22px}.focusCard h1{font-size:38px}.quickRow{grid-template-columns:repeat(4,1fr)}}
-
-.exploreHero{border-radius:24px;padding:17px;background:linear-gradient(145deg,rgba(105,224,255,.12),rgba(169,152,255,.07));border:1px solid rgba(105,224,255,.18)}.exploreHero h2{font-size:23px;margin:5px 0 6px}.exploreHero p{font-size:11.5px;line-height:1.45;color:#c4bfcc;margin:0}.filterRow{display:flex;gap:7px;overflow:auto;padding:12px 0 2px;scrollbar-width:none}.filterRow::-webkit-scrollbar{display:none}.filterRow button{white-space:nowrap;min-height:37px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:#171721;color:var(--muted);font-size:10px;font-weight:850}.filterRow button.active{background:#2a2935;color:#fff;border-color:rgba(105,224,255,.28)}.placeGrid{display:grid;gap:9px}.placeCard{display:grid;grid-template-columns:46px 1fr auto;gap:11px;align-items:start;padding:13px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}.placeCard.hide{display:none}.placeIcon{width:46px;height:46px;border-radius:14px;background:#242430;display:grid;place-items:center;font-size:24px}.placeCard h3{font-size:13px;margin:0 0 3px}.placeCard p{font-size:10px;line-height:1.4;color:var(--muted);margin:0}.placeMeta{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.placeTag{font-size:8px;font-weight:850;padding:4px 6px;border-radius:999px;background:#262632;color:#c8c4d0}.placeTag.beer{background:rgba(255,209,93,.11);color:#ffe39a}.placeTag.family{background:rgba(130,239,170,.10);color:#bdf7d0}.placeTag.shy{background:rgba(169,152,255,.11);color:#d8d0ff}.placeArrow{color:#6e6a78;font-size:18px;padding-top:10px}
-.mapPill{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:34px;margin-top:9px;padding:0 10px;border-radius:11px;border:1px solid rgba(105,224,255,.18);background:rgba(105,224,255,.08);color:#bcefff;font-size:9px;font-weight:900}
-.mapPill:active{transform:scale(.98)}
-.focusMapHint{display:block;margin-top:6px;color:#7b7886;font-size:8.5px;font-weight:700}
-.event .mapPill{min-height:30px;margin-top:7px;padding:0 8px;font-size:8.5px}
-.appleMark{font-weight:950;letter-spacing:-.02em}.spotlight{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(130deg,#201827,#151622);border:1px solid rgba(255,79,134,.18);padding:16px}.spotlight:after{content:'📼';position:absolute;right:10px;bottom:-10px;font-size:72px;opacity:.10;transform:rotate(-10deg)}.spotlight .eyebrow{color:#ff94b7}.spotlight h3{font-size:19px;margin:5px 0}.spotlight p{font-size:10.5px;line-height:1.45;color:var(--muted);margin:0;max-width:82%}.miniBtn{display:inline-flex;margin-top:11px;min-height:36px;align-items:center;padding:0 11px;border-radius:11px;border:1px solid var(--line);background:#272633;color:#fff;text-decoration:none;font-size:9.5px;font-weight:850}.drinkBest{border-color:rgba(255,209,93,.25);background:linear-gradient(120deg,rgba(255,209,93,.06),var(--panel))}.drinkBest h3:after{content:' BEST FIT';font-size:7px;color:var(--gold);margin-left:6px;letter-spacing:.08em;vertical-align:2px}.notice{font-size:9.5px;line-height:1.45;color:var(--muted);padding:11px 12px;border-radius:14px;background:#121219;border:1px solid var(--line);margin-top:9px}.age21{color:var(--gold);font-weight:850}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-
-.ticketHero{border-radius:24px;padding:17px;background:linear-gradient(145deg,rgba(255,209,93,.13),rgba(255,79,134,.07));border:1px solid rgba(255,209,93,.20)}
-.ticketHero h2{font-size:23px;margin:5px 0 6px}.ticketHero p{font-size:11.5px;line-height:1.45;color:#c4bfcc;margin:0}
-.ticketLaunch{margin-top:12px;border-radius:24px;padding:20px;background:linear-gradient(160deg,#23222d,#17171f);border:1px solid var(--line);text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.24)}
-.ticketIcon{width:76px;height:76px;margin:2px auto 13px;border-radius:22px;display:grid;place-items:center;font-size:36px;background:linear-gradient(145deg,var(--gold),#ff8b54);box-shadow:0 12px 30px rgba(255,169,74,.16)}
-.ticketLaunch h3{font-size:22px;margin:0 0 7px}.ticketLaunch p{font-size:11px;line-height:1.5;color:#bcb7c4;margin:0 auto 16px;max-width:330px}
-.ticketPrimary{width:100%;min-height:58px;border:0;border-radius:18px;background:linear-gradient(115deg,var(--pink),#ff775a);color:#fff;font-weight:950;font-size:13px;box-shadow:0 12px 28px rgba(255,79,134,.18)}
-.ticketSecondary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
-.ticketSecondary button{min-height:46px;border-radius:14px;border:1px solid var(--line);background:#282733;color:#fff;font-size:10px;font-weight:850}
-.ticketTip{display:grid;grid-template-columns:auto 1fr;gap:10px;text-align:left;margin-top:14px;padding:12px;border-radius:16px;background:rgba(255,255,255,.04)}
-.ticketTip .ico{font-size:20px}.ticketTip b{display:block;font-size:10px;margin-bottom:2px}.ticketTip span{display:block;color:#aaa5b0;font-size:9.5px;line-height:1.4}
-.securityNote{margin-top:9px;padding:11px 12px;border-radius:14px;background:rgba(255,209,93,.07);border:1px solid rgba(255,209,93,.14);font-size:9.5px;line-height:1.45;color:#ccc6b8}.securityNote b{color:var(--gold)}
-@media(max-width:410px){.nav button{font-size:7.7px}.nav button span{font-size:17px}}
+:root{--bg:#0a0a0f;--panel:#15151d;--panel2:#1d1c27;--line:#2f2e3a;--text:#f7f4f8;--muted:#a8a3af;--pink:#ff4f86;--gold:#ffd15d;--green:#58dda0;--cyan:#69e0ff;--violet:#9e86ff;--orange:#ff8b54}*{box-sizing:border-box}html{scroll-behavior:smooth;touch-action:manipulation}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Arial,sans-serif;padding-bottom:90px}button,a{font:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button{cursor:pointer}.hide{display:none!important}.app{max-width:480px;margin:auto;min-height:100vh}.topbar{position:sticky;top:0;z-index:20;background:rgba(10,10,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid #1f1f28;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}.brandIcon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:linear-gradient(145deg,#ff577f,#ffb15b)}.brand h1{font-size:18px;margin:0}.brand p{margin:2px 0 0;font-size:11px;color:var(--muted)}.clock{text-align:right}.clock b{display:block;font-size:17px}.clock span{display:block;margin-top:2px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#aaa5b0}.view{display:none}.view.active{display:block}.pad{padding:14px 14px 0}.statusStrip{display:flex;gap:10px;align-items:center;padding:13px 14px;border-radius:20px;background:linear-gradient(120deg,rgba(255,209,93,.13),rgba(255,79,134,.08));border:1px solid rgba(255,209,93,.28)}.dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(88,221,160,.12)}.statusCopy{display:flex;flex-wrap:wrap;gap:3px 0}.statusCopy b{font-size:13px}.statusCopy span{font-size:11px;color:#c6c0c9}.focusCard{margin-top:12px;padding:20px;border-radius:30px;border:1px solid #32303d;background:radial-gradient(circle at 100% 0,rgba(255,79,134,.16),transparent 32%),linear-gradient(160deg,#191922,#121219);box-shadow:0 24px 60px rgba(0,0,0,.25)}.focusTop{display:grid;grid-template-columns:minmax(0,1fr) 72px;gap:10px}.eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.17em;font-size:9.5px;font-weight:900}.focusText h1{font-size:34px;line-height:.98;margin:9px 0 9px;letter-spacing:-.04em}.focusText p{font-size:14px;color:#b7b2bd;line-height:1.45;margin:0}.where{margin-top:12px;display:inline-flex;padding:8px 10px;border-radius:999px;border:1px solid #3d3a48;background:#23222d;font-size:10px;font-weight:800;color:#ded9e2}.count{text-align:right}.count b{font-size:29px;line-height:.95;color:var(--gold);display:block}.count span{font-size:8.5px;line-height:1.35;text-transform:uppercase;letter-spacing:.14em;color:#a9a4af}.progress{height:7px;border-radius:99px;background:#2b2a35;overflow:hidden;margin:16px 0}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--gold));border-radius:99px}.prepList{display:grid;gap:8px;margin:0 0 14px}.prepItem{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:14px;background:#1d1c26;border:1px solid #302f39;font-size:10px;color:#d8d4dd}.prepItem span{font-size:17px}.actionGrid{display:grid;grid-template-columns:1.35fr .95fr .9fr;gap:8px}.action{min-height:50px;border-radius:18px;border:1px solid #3a3845;background:#23222d;color:white;font-size:11px;font-weight:900}.action.primary{border:0;background:linear-gradient(120deg,var(--pink),#ff7056)}.action.done{background:#193027;color:#aef2cc;border-color:#355244}.quickRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.quick{height:71px;border-radius:20px;border:1px solid #302f39;background:#14141c;color:#eee9f2;font-size:11px;font-weight:850}.quick span{font-size:22px;display:block;margin-bottom:5px}.section{padding:18px 14px 0}.sectionHead{display:flex;align-items:end;justify-content:space-between;margin-bottom:10px}.sectionHead h2{margin:0;font-size:21px}.sectionHead span{font-size:8.5px;text-transform:uppercase;letter-spacing:.14em;color:#aaa5b0}.upcoming{display:grid;gap:7px}.upRow{display:grid;grid-template-columns:53px 1fr 18px;gap:8px;align-items:center;padding:12px;border:1px solid #2e2d37;border-radius:18px;background:#14141b}.upRow.now{border-color:rgba(255,209,93,.36);background:linear-gradient(110deg,rgba(255,209,93,.08),rgba(255,255,255,.02))}.upTime{font-size:11px;font-weight:950;color:var(--gold)}.upRow b{font-size:12px;display:block}.upRow span{font-size:9.5px;color:#a9a4af;margin-top:3px;display:block}.arrow{font-size:21px;color:#66616f}.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(480px,100%);padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(6,1fr);gap:3px;background:rgba(11,11,16,.96);border-top:1px solid #23222b;backdrop-filter:blur(20px);z-index:40}.nav button{border:0;background:transparent;color:#777381;border-radius:13px;padding:7px 2px 5px;font-size:8px;font-weight:900;text-transform:uppercase}.nav button span{display:block;font-size:18px;margin-bottom:4px}.nav button.active{background:#1c1c26;color:#fff}.timeline{display:grid;gap:8px}.event{display:grid;grid-template-columns:45px 1fr 34px;gap:8px;padding:12px;border-radius:19px;border:1px solid #2e2d37;background:#15151d}.event.current{border-color:rgba(255,209,93,.42);background:linear-gradient(110deg,rgba(255,209,93,.09),#15151d)}.eventTime{color:var(--gold);font-weight:900;font-size:10px}.event h3{font-size:12px;margin:0}.event p{margin:3px 0 0;color:#aaa5b0;font-size:9.5px;line-height:1.35}.event .eventDone{width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:#242430;color:#777386;font-weight:900}.event .eventDone.done{background:var(--green);color:#0a3219}.tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.tag{font-size:7.5px;padding:4px 6px;border-radius:999px;background:#272632;color:#bcb6c4}.tag.shy{background:rgba(158,134,255,.12);color:#c9bbff}.tag.ati{background:rgba(105,224,255,.09);color:#a7ecff}.pace{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.pace button{border:1px solid #33313c;background:#17171f;color:#9e99a5;border-radius:13px;padding:9px 3px;font-size:9px;font-weight:850}.pace button.active{border-color:var(--pink);color:#fff;background:#281922}.missionGrid{display:grid;gap:8px}.mission{display:grid;grid-template-columns:36px 1fr 34px;align-items:center;gap:8px;padding:11px;border-radius:17px;border:1px solid #2f2e38;background:#15151d}.mi{font-size:22px}.mc b{display:block;font-size:11px}.mc span{display:block;font-size:8.5px;color:#aaa5b0;margin-top:2px}.mission button{width:32px;height:32px;border-radius:10px;border:1px solid #35333f;background:#25242f;color:#77717e}.mission button.done{background:var(--violet);color:white}.scoreCard{display:grid;grid-template-columns:68px 1fr;gap:14px;align-items:center;padding:15px;border-radius:22px;background:linear-gradient(135deg,rgba(158,134,255,.12),rgba(255,79,134,.07));border:1px solid rgba(158,134,255,.25)}.ring{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--violet) 0deg,#2a2935 0deg);position:relative}.ring:after{content:"";position:absolute;inset:7px;border-radius:50%;background:#15151d}.ring b{position:relative;z-index:2;font-size:16px}.reward h3{font-size:14px;margin:0}.reward p{font-size:9.5px;color:#aaa5b0;margin:4px 0 0}.moreCard,.card{padding:15px;border-radius:20px;border:1px solid #2e2d37;background:#15151d;margin-bottom:9px}.moreCard h3,.card h3{font-size:12px;margin:0 0 7px}.moreCard p,.card p{font-size:9.7px;color:#aaa5b0;line-height:1.45;margin:5px 0}.safe{color:#9debc3!important}.warn{color:#f4d890!important}.linkRow{display:grid;grid-template-columns:1fr 1fr;gap:7px}.linkRow a,.miniBtn{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:39px;border:1px solid #34323e;border-radius:12px;background:#22212c;color:#fff;font-size:9px;font-weight:850}.sheetBack{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;align-items:end}.sheetBack.show{display:flex}.sheet{width:min(480px,100%);margin:auto;background:#191921;border-radius:26px 26px 0 0;padding:15px 15px calc(18px + env(safe-area-inset-bottom));border:1px solid #302e39;max-height:74vh;overflow:auto}.grab{width:38px;height:4px;background:#44414e;border-radius:99px;margin:0 auto 12px}.sheet h2{font-size:19px;margin:0 0 9px}.sheetChoice{padding:12px;border-radius:15px;background:#22212c;border:1px solid #34323e;margin-top:7px}.sheetChoice b{font-size:11px}.sheetChoice p{font-size:9.5px;color:#aaa5b0;margin:4px 0 0;line-height:1.4}.toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,20px);padding:9px 13px;border-radius:999px;background:#fff;color:#111;font-size:9.5px;font-weight:900;opacity:0;transition:.2s;z-index:90;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}.exploreHero{position:relative;overflow:hidden;border-radius:26px;padding:18px;background:linear-gradient(145deg,#1f1d28,#13131b);border:1px solid #32303c;box-shadow:0 20px 50px rgba(0,0,0,.22)}.exploreHero:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-75px;top:-75px;background:radial-gradient(circle,rgba(255,79,134,.19),transparent 65%)}.exploreHero h2{font-size:26px;line-height:1.02;margin:6px 0 7px}.exploreHero p{font-size:11px;color:#aaa5b0;line-height:1.45;margin:0;max-width:330px}.filterBar{display:flex;gap:6px;overflow:auto;padding:12px 1px 4px;scrollbar-width:none}.filterBar::-webkit-scrollbar{display:none}.filterBar button{white-space:nowrap;border:1px solid #33313c;background:#17171f;color:#aaa5b0;border-radius:999px;padding:8px 11px;font-size:9px;font-weight:850}.filterBar button.active{background:#fff;color:#111;border-color:#fff}.spotlight{border-radius:22px;padding:15px;margin-top:4px;background:linear-gradient(130deg,rgba(158,134,255,.15),rgba(255,79,134,.10));border:1px solid rgba(158,134,255,.25);position:relative;overflow:hidden}.spotlight .bigEmoji{position:absolute;font-size:76px;opacity:.12;right:-5px;bottom:-20px;transform:rotate(-8deg)}.spotlight b{display:block;font-size:14px}.spotlight p{font-size:9.7px;color:#c4beca;line-height:1.45;margin:5px 0 10px;max-width:320px}.spotTags{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.spotTags span{font-size:7.8px;padding:4px 6px;border-radius:999px;background:rgba(255,255,255,.07);color:#ddd6e6}.placeGrid{display:grid;gap:8px}.placeCard{display:grid;grid-template-columns:48px 1fr 18px;gap:10px;padding:13px;border-radius:18px;background:#15151d;border:1px solid #2e2d38}.placeCard.hide{display:none}.placeIcon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:25px;background:#24232e}.placeCard h3{font-size:11.5px;margin:1px 0 3px}.placeCard p{font-size:9.2px;color:#aaa5b0;line-height:1.4;margin:0}.placeMeta{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap}.placeMeta span{font-size:7.4px;padding:4px 6px;border-radius:999px;background:#272632;color:#bbb5c1}.placeArrow{color:#6e6a78;font-size:18px;padding-top:10px}.mapPill{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:34px;margin-top:9px;padding:0 10px;border-radius:11px;border:1px solid rgba(105,224,255,.18);background:rgba(105,224,255,.08);color:#bcefff;font-size:9px;font-weight:900}.mapPill:active{transform:scale(.98)}.focusMapHint{display:block;margin-top:6px;color:#7b7886;font-size:8.5px;font-weight:700}.event .mapPill{min-height:30px;margin-top:7px;padding:0 8px;font-size:8.5px}.appleMark{font-weight:950;letter-spacing:-.02em}.drinkBest{border-color:rgba(255,209,93,.34);background:linear-gradient(120deg,rgba(255,209,93,.08),#15151d)}.bestBadge{display:inline-block;margin-left:5px;font-size:7px;padding:3px 5px;border-radius:999px;background:var(--gold);color:#332400;font-weight:950}.drinkTip{margin-top:10px;padding:12px 13px;border-radius:16px;background:rgba(255,209,93,.07);border:1px solid rgba(255,209,93,.15);font-size:9.4px;line-height:1.45;color:#c8c1b2}.ticketHero{border-radius:24px;padding:17px;background:linear-gradient(145deg,rgba(255,209,93,.13),rgba(255,79,134,.07));border:1px solid rgba(255,209,93,.20)}.ticketHero h2{font-size:23px;margin:5px 0 6px}.ticketHero p{font-size:11.5px;line-height:1.45;color:#c4bfcc;margin:0}.ticketLaunch{margin-top:12px;border-radius:24px;padding:20px;background:linear-gradient(160deg,#23222d,#17171f);border:1px solid var(--line);text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.24)}.ticketIcon{width:76px;height:76px;margin:2px auto 13px;border-radius:22px;display:grid;place-items:center;font-size:36px;background:linear-gradient(145deg,var(--gold),#ff8b54);box-shadow:0 12px 30px rgba(255,169,74,.16)}.ticketLaunch h3{font-size:22px;margin:0 0 7px}.ticketLaunch p{font-size:11px;line-height:1.5;color:#bcb7c4;margin:0 auto 16px;max-width:330px}.ticketPrimary{width:100%;min-height:58px;border:0;border-radius:18px;background:linear-gradient(115deg,var(--pink),#ff775a);color:#fff;font-weight:950;font-size:13px;box-shadow:0 12px 28px rgba(255,79,134,.18)}.ticketSecondary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.ticketSecondary button{min-height:46px;border-radius:14px;border:1px solid var(--line);background:#282733;color:#fff;font-size:10px;font-weight:850}.ticketTip{display:grid;grid-template-columns:auto 1fr;gap:10px;text-align:left;margin-top:14px;padding:12px;border-radius:16px;background:rgba(255,255,255,.04)}.ticketTip .ico{font-size:20px}.ticketTip b{display:block;font-size:10px;margin-bottom:2px}.ticketTip span{display:block;color:#aaa5b0;font-size:9.5px;line-height:1.4}.securityNote{margin-top:9px;padding:11px 12px;border-radius:14px;background:rgba(255,209,93,.07);border:1px solid rgba(255,209,93,.14);font-size:9.5px;line-height:1.45;color:#ccc6b8}.securityNote b{color:var(--gold)}@media(max-width:410px){.nav button{font-size:7.7px}.nav button span{font-size:17px}}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="brand"><div class="logo">🎡</div><div><b>Fair Night</b><small>Chris · Ati · Shylene</small></div></div>
-    <div class="clock"><b id="clock">2:16</b><small id="clockState">before arrival</small></div>
+    <div class="brand"><div class="brandIcon">🎡</div><div><h1>Fair Night</h1><p>Chris · Ati · Shylene</p></div></div>
+    <div class="clock"><b id="clock">2:16 PM</b><span id="clockState">before arrival</span></div>
   </header>
 
   <main id="view-now" class="view active">
@@ -102,14 +75,8 @@
           <button id="clearTicketLink">Forget saved link</button>
         </div>
 
-        <div class="ticketTip">
-          <div class="ico">☀️</div>
-          <div><b>Before you reach the scanner</b><span>Open the tickets, increase screen brightness, and keep the barcode fully visible.</span></div>
-        </div>
-        <div class="ticketTip">
-          <div class="ico">📶</div>
-          <div><b>Weak signal?</b><span>Open Etix while you still have service. Once the ticket is displayed, avoid refreshing unnecessarily.</span></div>
-        </div>
+        <div class="ticketTip"><div class="ico">☀️</div><div><b>Before you reach the scanner</b><span>Open the tickets, increase screen brightness, and keep the barcode fully visible.</span></div></div>
+        <div class="ticketTip"><div class="ico">📶</div><div><b>Weak signal?</b><span>Open Etix while you still have service. Once the ticket is displayed, avoid refreshing unnecessarily.</span></div></div>
       </div>
 
       <div class="securityNote"><b>Private by design:</b> the public app contains no Etix credentials. If you save your ticket link here, it stays in this browser’s local storage on this device.</div>
@@ -118,344 +85,88 @@
 
   <main id="view-plan" class="view">
     <section class="section" style="padding-top:12px">
-      <div class="sectionHead"><h2>Tonight</h2><span>tap ✓ to clear stops</span></div>
-      <div class="timeline" id="timeline"></div>
+      <div class="sectionHead"><h2>Your night</h2><span>tap ✓ as you go</span></div>
+      <div class="pace" id="pace"><button data-pace="chill">Chill</button><button data-pace="balanced" class="active">Balanced</button><button data-pace="max">Max fun</button></div>
     </section>
+    <section class="section"><div class="timeline" id="timeline"></div></section>
   </main>
 
   <main id="view-explore" class="view">
     <section class="section" style="padding-top:12px">
-      <div class="exploreHero">
-        <div class="eyebrow">Wander without wandering aimlessly</div>
-        <h2>Worth a detour.</h2>
-        <p>These are the places I’d actually surface for your family — not every booth and building at the fair.</p>
-        <div class="filterRow" id="exploreFilters">
-          <button class="active" data-filter="all">✨ Best</button>
-          <button data-filter="family">👨‍👩‍👧 Family</button>
-          <button data-filter="shylene">★ Shylene</button>
-          <button data-filter="beer">🍺 Beer & drinks</button>
-          <button data-filter="calm">🌿 Calm</button>
-        </div>
-      </div>
+      <div class="exploreHero"><div class="eyebrow">Wander mode</div><h2>Worth a detour.</h2><p>Not everything needs a scheduled time. These are the places I’d actually pull you toward if you’re nearby and have 15–40 minutes.</p></div>
+      <div class="filterBar" id="exploreFilters"><button class="active" data-filter="all">Everything</button><button data-filter="family">👨‍👩‍👧 Family</button><button data-filter="cool">✨ Cool stuff</button><button data-filter="chill">🌿 Easy</button><button data-filter="beer">🍺 Beer</button><button data-filter="shop">🛍 Shop</button></div>
     </section>
 
-    <section class="section">
-      <div class="spotlight">
-        <div class="eyebrow">My wildcard pick for you</div>
-        <h3>📼 REWIND: A VHS Comeback</h3>
-        <p>Huntington Beach Building · retro movie art, soundtrack displays, live painting, an ’80s vintage arcade and The Hitchcock speakeasy. This is the one non-carnival stop I would actively make time for.</p>
-        <a class="miniBtn" href="https://ocfair.com/oc-fair/things-to-do/featured-exhibits/" target="_blank">Official exhibit info ↗</a>
-        <button class="miniBtn" type="button" onclick="openAppleMaps('33.66685,-117.90178')"> Maps · GPS</button>
-      </div>
+    <section class="section" style="padding-top:10px">
+      <div class="spotlight"><div class="bigEmoji">📼</div><div class="eyebrow">Chris detour · Huntington Beach Building</div><b>REWIND: A VHS Comeback</b><p>This is the one I’d make time for: retro movie art, an ’80s-style arcade, live painting and The Hitchcock speakeasy. It feels more like an experience than another exhibit hall.</p><div class="spotTags"><span>🕹 ’80s arcade</span><span>🍸 speakeasy</span><span>🎨 live art</span><span>📼 retro</span></div><div style="display:flex;gap:7px;flex-wrap:wrap"><a class="miniBtn" href="https://ocfair.com/oc-fair/things-to-do/featured-exhibits/" target="_blank">Official exhibit info ↗</a><button class="miniBtn" type="button" onclick="openAppleMaps('33.66685,-117.90178')"> Maps · GPS</button></div></div>
     </section>
 
-    <section class="section">
-      <div class="sectionHead"><h2>Places to wander into</h2><span>curated picks</span></div>
-      <div class="placeGrid" id="placeGrid">
-        <div class="placeCard" data-cats="all family shylene" data-map="33.66714,-117.90027">
-          <div class="placeIcon">🌊</div><div><h3>Orange County Sand and Sea</h3><p><b style="color:#ded9e5">OC Promenade</b> · beach landmarks, culinary displays, a touch tank and VR. Easy 20–30 minute explore block.</p><div class="placeMeta"><span class="placeTag family">family</span><span class="placeTag shy">Shylene</span><span class="placeTag">interactive</span></div></div><div class="placeArrow">›</div>
-        </div>
-        <div class="placeCard" data-cats="all family shylene calm beer" data-map="33.66599,-117.90253">
-          <div class="placeIcon">🐐</div><div><h3>Centennial Farm</h3><p><b style="color:#ded9e5">Between Blue Gate + Heroes Hall</b> · three-acre working farm with livestock and crops. Craft Brew East is in this area too.</p><div class="placeMeta"><span class="placeTag family">family</span><span class="placeTag">animals</span><span class="placeTag beer">beer nearby</span></div></div><div class="placeArrow">›</div>
-        </div>
-        <div class="placeCard" data-cats="all family shylene calm" data-map="33.66770,-117.89915">
-          <div class="placeIcon">🐑</div><div><h3>Great American Petting Farm</h3><p><b style="color:#ded9e5">Near Yellow Gate</b> · goats, sheep, pigs and more. Better choice than another midway lap if Shylene needs a reset.</p><div class="placeMeta"><span class="placeTag shy">Shylene</span><span class="placeTag family">family</span><span class="placeTag">hands-on</span></div></div><div class="placeArrow">›</div>
-        </div>
-        <div class="placeCard" data-cats="all calm" data-map="33.66688,-117.90035">
-          <div class="placeIcon">🎨</div><div><h3>Visual Arts + Woodworking Gallery</h3><p>Fine art, photography and woodworking competition entries. A genuinely useful cool-down block when the midway gets loud.</p><div class="placeMeta"><span class="placeTag">art</span><span class="placeTag">indoors</span><span class="placeTag">low-key</span></div></div><div class="placeArrow">›</div>
-        </div>
-        <div class="placeCard" data-cats="all calm" data-map="33.66670,-117.90300">
-          <div class="placeIcon">🛍️</div><div><h3>Crafters Village + shopping buildings</h3><p>Costa Mesa Building, Santa Ana Pavilion and Crafters Village are the main shopping zones. Good late-evening browse before the buildings close.</p><div class="placeMeta"><span class="placeTag">shopping</span><span class="placeTag">browse</span></div></div><div class="placeArrow">›</div>
-        </div>
-      </div>
-    </section>
+    <section class="section"><div class="sectionHead"><h2>Places to wander into</h2><span>no schedule required</span></div><div class="placeGrid" id="placeGrid">
+      <div class="placeCard" data-cats="family cool chill" data-map="33.66714,-117.90027"><div class="placeIcon">🌊</div><div><h3>Orange County Sand and Sea</h3><p>Touch tank, underwater VR and hands-on OC coastline exhibits. Very good Shylene stop if everyone wants a break from rides.</p><div class="placeMeta"><span>OC Promenade</span><span>interactive</span></div></div><div class="placeArrow">›</div></div>
+      <div class="placeCard" data-cats="family chill" data-map="33.66599,-117.90253"><div class="placeIcon">🐐</div><div><h3>Centennial Farm</h3><p>Animals, gardens and an instant change of pace from the midway. Conveniently also one of the better beer compromises for you.</p><div class="placeMeta"><span>easy reset</span><span>family</span></div></div><div class="placeArrow">›</div></div>
+      <div class="placeCard" data-cats="family cool" data-map="33.66770,-117.89915"><div class="placeIcon">🐑</div><div><h3>Great American Petting Farm</h3><p>Goats, sheep and other animals you can get close to. More hands-on than simply walking past livestock pens.</p><div class="placeMeta"><span>Shylene</span><span>animals</span></div></div><div class="placeArrow">›</div></div>
+      <div class="placeCard" data-cats="cool chill" data-map="33.66688,-117.90035"><div class="placeIcon">🖼️</div><div><h3>Visual Arts + Woodworking Gallery</h3><p>Air-conditioned-ish visual reset: photography, fine art and surprisingly impressive woodworking rather than carnival overload.</p><div class="placeMeta"><span>gallery</span><span>slow down</span></div></div><div class="placeArrow">›</div></div>
+      <div class="placeCard" data-cats="shop chill" data-map="33.66670,-117.90300"><div class="placeIcon">🛍️</div><div><h3>Crafters Village + shopping buildings</h3><p>Good wandering territory when Ati wants to browse and nobody wants to commit to another scheduled event.</p><div class="placeMeta"><span>shopping</span><span>browsing</span></div></div><div class="placeArrow">›</div></div>
+    </div></section>
 
-    <section class="section" id="drinksSection">
-      <div class="sectionHead"><h2>Beer + grown-up drinks</h2><span>21+ · official vendors</span></div>
-      <div class="placeGrid">
-        <div class="placeCard drinkBest" data-cats="beer" data-map="33.66617,-117.90208">
-          <div class="placeIcon">🍺</div><div><h3>Craft Brew East</h3><p><b style="color:#ded9e5">Centennial Farm</b> · craft beer plus frozen aguas frescas. Best family compromise because everybody can get something and you’re already near a worthwhile stop.</p><div class="placeMeta"><span class="placeTag beer">craft beer</span><span class="placeTag family">family-friendly pairing</span></div></div><div class="placeArrow">›</div>
-        </div>
-        <div class="placeCard" data-cats="beer" data-map="33.66700,-117.90084">
-          <div class="placeIcon">🌎</div><div><h3>Beers of the World</h3><p><b style="color:#ded9e5">Main Mall</b> · 40+ global beer selections. Best choice if you actually want to browse beers rather than just grab whatever tap is nearby.</p><div class="placeMeta"><span class="placeTag beer">40+ beers</span><span class="placeTag">Main Mall</span></div></div><div class="placeArrow">›</div>
-        </div>
-        <div class="placeCard" data-cats="beer" data-map="33.66636,-117.90108">
-          <div class="placeIcon">🍹</div><div><h3>La Cantina</h3><p><b style="color:#ded9e5">Fair Square</b> · palomas, margaritas, micheladas, tequila, cocktails and imported beer.</p><div class="placeMeta"><span class="placeTag beer">cocktails</span><span class="placeTag beer">micheladas</span></div></div><div class="placeArrow">›</div>
-        </div>
-        <div class="placeCard" data-cats="beer" data-map="33.66776,-117.90091">
-          <div class="placeIcon">🎵</div><div><h3>Hangar Bar</h3><p><b style="color:#ded9e5">Inside The Hangar · Family Fairway</b> · cocktails, beer and refreshments. Nice if you’re already catching something around The Hangar.</p><div class="placeMeta"><span class="placeTag beer">beer</span><span class="placeTag">inside Hangar</span></div></div><div class="placeArrow">›</div>
-        </div>
-        <div class="placeCard" data-cats="beer" data-map="33.66700,-117.90084">
-          <div class="placeIcon">🍸</div><div><h3>Main Mall Margaritas / Micheladas</h3><p><b style="color:#ded9e5">Main Mall</b> · frozen or on-the-rocks margaritas, plus draft beers and micheladas nearby.</p><div class="placeMeta"><span class="placeTag beer">margaritas</span><span class="placeTag beer">draft beer</span></div></div><div class="placeArrow">›</div>
-        </div>
-      </div>
-      <div class="notice"><span class="age21">21+ only.</span> Outside alcohol is not permitted. Vendor availability and lines can change, so use the official Food Finder if a listed bar is closed or mobbed.</div>
-      <a class="collapseBtn" style="display:grid;place-items:center;text-decoration:none" href="https://ocfair.com/oc-fair/food-finder/?food-category=bars-lounges" target="_blank">Open official Bars & Lounges finder ↗</a>
-    </section>
+    <section class="section" id="drinksSection"><div class="sectionHead"><h2>🍺 Beer + grown-up drinks</h2><span>actual places to aim for</span></div><div class="drinkTip"><b style="color:var(--gold)">My easiest family compromise:</b> stop at Craft Brew East while you’re already around Centennial Farm. You can get a craft beer and they also list frozen aguas frescas — no need to split the family into two separate missions.</div><div class="placeGrid" style="margin-top:8px">
+      <div class="placeCard drinkBest" data-map="33.66617,-117.90208"><div class="placeIcon">🍺</div><div><h3>Craft Brew East <span class="bestBadge">BEST FIT</span></h3><p>Craft beer plus frozen aguas frescas at Centennial Farm. Best choice when you want a beer without making the drink stop the whole activity.</p><div class="placeMeta"><span>Centennial Farm</span><span>craft beer</span><span>agua fresca</span></div></div><div class="placeArrow">›</div></div>
+      <div class="placeCard" data-map="33.66700,-117.90084"><div class="placeIcon">🌎</div><div><h3>Beers of the World</h3><p>The beer-first choice: the Fair lists 40+ selections from around the world. Go here when the beer itself is the point.</p><div class="placeMeta"><span>Main Mall</span><span>40+ beers</span></div></div><div class="placeArrow">›</div></div>
+      <div class="placeCard" data-map="33.66636,-117.90108"><div class="placeIcon">🍹</div><div><h3>La Cantina</h3><p>Margaritas, palomas, micheladas, tequila, cocktails and imported beer. Better if Ati wants something other than beer.</p><div class="placeMeta"><span>Fair Square</span><span>cocktails</span><span>margaritas</span></div></div><div class="placeArrow">›</div></div>
+      <div class="placeCard" data-map="33.66776,-117.90091"><div class="placeIcon">🎸</div><div><h3>Hangar Bar</h3><p>Beer and cocktails right inside The Hangar. Useful when you’re already catching music there rather than worth a cross-fair trek.</p><div class="placeMeta"><span>The Hangar</span><span>beer</span><span>cocktails</span></div></div><div class="placeArrow">›</div></div>
+      <div class="placeCard" data-map="33.66700,-117.90084"><div class="placeIcon">🌶️</div><div><h3>Main Mall Margaritas / Micheladas</h3><p>Simple midway option if you’re already around Main Mall and want a margarita or michelada without hunting down a lounge.</p><div class="placeMeta"><span>Main Mall</span><span>quick stop</span></div></div><div class="placeArrow">›</div></div>
+    </div></section>
   </main>
 
   <main id="view-shylene" class="view">
-    <section class="section" style="padding-top:12px">
-      <div class="missionHero">
-        <div class="eyebrow">Shylene’s game</div><h2>Four missions unlock the prize.</h2><p>She chooses the final dessert or last ride. That gives her ownership without letting the whole night become a ride negotiation.</p>
-        <div class="scoreLine"><div class="ring" id="ring"><b id="score">0/6</b></div><div class="scoreCopy"><b id="rewardTitle">Reward locked</b><span id="rewardText">Complete 4 missions</span></div></div>
-        <div class="missions" id="missions"></div>
-      </div>
-    </section>
+    <section class="section" style="padding-top:12px"><div class="scoreCard"><div class="ring" id="ring"><b id="score">0/6</b></div><div class="reward"><h3 id="rewardTitle">Reward locked</h3><p id="rewardText">Complete 4 missions → Shylene chooses the last ride or dessert.</p></div></div></section>
+    <section class="section"><div class="sectionHead"><h2>Shylene’s missions</h2><span>she runs this tab</span></div><div class="missionGrid" id="missions"></div></section>
   </main>
 
   <main id="view-more" class="view">
     <section class="section" style="padding-top:12px">
-      <div class="sectionHead"><h2>Your pace</h2><span>changes optional stops</span></div>
-      <div class="seg" id="pace"><button data-pace="chill">🌿 Chill</button><button data-pace="balanced">✨ Balanced</button><button data-pace="max">⚡ Max fun</button></div>
+      <div class="sectionHead"><h2>Food guardrails</h2><span>Ati</span></div>
+      <div class="moreCard"><h3>🥙 Easy ordering rule</h3><p>Start with vegetarian, chicken, corn, fries, fruit and dessert options. Ask about pork/bacon and shared preparation when it matters. Don’t turn dinner into a research project.</p><p class="safe">✓ Good targets: street corn · agua fresca · chocolate strawberries · plant-based/vegetarian choices</p><p class="warn">⚠ Ask when needed: shared grills/fryers or stands serving bacon/sausage alongside your order</p></div>
+      <div class="moreCard"><h3>🌙 Exit rule</h3><p>You do not need to stay until midnight. If the last hour feels like work, take the photo, let Shylene cast the final vote, and leave on a high note.</p></div>
     </section>
-    <section class="section">
-      <div class="sectionHead"><h2>Ati-friendly food guardrails</h2><span>avoid pork surprises</span></div>
-      <div class="cardGrid two">
-        <div class="card"><h3>🌽 Easy early taste</h3><p>Corn on the cob / street corn before 5 PM.</p><p class="safe">✓ Simple starting point; ask about toppings if needed.</p></div>
-        <div class="card"><h3>🍓 Shared sweet</h3><p>Chocolate strawberries make an easy three-way sample.</p><p class="safe">✓ Good low-commitment fair food.</p></div>
-        <div class="card"><h3>🌱 Dinner direction</h3><p>Favor vegetarian or clearly chicken-based choices when the menu is complicated.</p><p class="safe">✓ Ask directly about shared grills and fryer oil.</p></div>
-        <div class="card"><h3>🥓 Shared-prep warning</h3><p>Some fair vendors prepare bacon-wrapped items alongside chicken.</p><p class="warn">⚠ If avoiding pork strictly, confirm surfaces/oil before ordering.</p></div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="sectionHead"><h2>Internal navigation</h2><span>direct GPS pins</span></div>
-      <div class="card">
-        <h3>📍 Apple Maps now gets coordinates</h3>
-        <p>The map buttons send latitude/longitude directly instead of asking Apple to search the venue name. Permanent buildings use mapped centers; temporary Fair zones and stands use a pin placed in their Fair-map zone.</p>
-        <p class="safe">✓ No more collapsing every destination to 88 Fair Drive.</p>
-      </div>
-    </section>
-    <section class="section">
-      <div class="sectionHead"><h2>Useful links</h2><span>official OC Fair</span></div>
-      <div class="infoList">
-        <a class="info" href="https://ocfair.com/oc-fair/things-to-do/daily-schedule/" target="_blank"><i>📅</i><div><b>Today’s full schedule</b><span>Official daily listings</span></div><em>›</em></a>
-        <a class="info" href="https://ocfair.com/oc-fair/food-finder/" target="_blank"><i>🍴</i><div><b>Food Finder</b><span>Search current vendors</span></div><em>›</em></a>
-        <a class="info" href="https://ocfair.com/about-us/maps-directions/" target="_blank"><i>🗺️</i><div><b>Fair map + directions</b><span>Gates, property map, traffic</span></div><em>›</em></a>
-        <a class="info" href="https://ocfair.com/oc-fair/things-to-do/carnival/" target="_blank"><i>🎟️</i><div><b>Ride info</b><span>Ride list and height rules</span></div><em>›</em></a>
-      </div>
-      <p class="tiny">This app is deliberately curated rather than exhaustive. Exact vendor ingredients, line conditions and event timing can change; confirm strict dietary needs with the vendor.</p>
-    </section>
+    <section class="section"><div class="sectionHead"><h2>Internal navigation</h2><span>direct GPS pins</span></div><div class="card"><h3>📍 Apple Maps now gets coordinates</h3><p>The map buttons send latitude/longitude directly instead of asking Apple to search the venue name. Permanent buildings use mapped centers; temporary Fair zones and stands use a pin placed in their Fair-map zone.</p><p class="safe">✓ No more collapsing every destination to 88 Fair Drive.</p><button id="resetArrival" style="margin-top:10px;min-height:42px;width:100%;border-radius:12px;border:1px solid var(--line);background:#25242f;color:#fff;font-weight:850;font-size:10px">I’m not there yet — reset fair mode</button></div></section>
+    <section class="section"><div class="sectionHead"><h2>Useful links</h2><span>official OC Fair</span></div><div class="linkRow"><a href="https://ocfair.com/oc-fair/things-to-do/daily-schedule/" target="_blank">Daily schedule ↗</a><a href="https://ocfair.com/oc-fair/things-to-do/food/" target="_blank">Food finder ↗</a><a href="https://ocfair.com/about-us/maps-directions/" target="_blank">Fair map ↗</a><a href="https://ocfair.com/oc-fair/things-to-do/carnival/" target="_blank">Carnival ↗</a></div></section>
   </main>
 </div>
 
-<nav class="bottom"><div class="nav">
-  <button class="active" data-view="now"><span>◉</span>NOW</button>
-  <button data-view="tickets"><span>🎟</span>TICKETS</button>
-  <button data-view="plan"><span>≡</span>PLAN</button>
-  <button data-view="explore"><span>⌁</span>EXPLORE</button>
-  <button data-view="shylene"><span>★</span>SHYLENE</button>
-  <button data-view="more"><span>•••</span>MORE</button>
-</div></nav>
-
-<div class="sheetBack" id="sheetBack"><div class="sheet"><div class="handle"></div><h2 id="sheetTitle"></h2><p id="sheetDesc"></p><div id="sheetChoices"></div></div></div>
-<div class="toast" id="toast">Saved</div>
-
+<nav class="nav"><button data-view="now" class="active"><span>◉</span>Now</button><button data-view="tickets"><span>🎟️</span>Tickets</button><button data-view="plan"><span>≡</span>Plan</button><button data-view="explore"><span>⌁</span>Explore</button><button data-view="shylene"><span>★</span>Shylene</button><button data-view="more"><span>•••</span>More</button></nav>
+<div class="sheetBack" id="sheetBack"><div class="sheet"><div class="grab"></div><div id="sheetContent"></div></div></div><div class="toast" id="toast"></div>
 <script>
-const ARRIVAL=16*60;
-const TICKET_KEY='fair-ticket-url';
-const memoryStore=Object.create(null);
-function storeGet(key){
-  try{
-    const v=window['localStorage'].getItem(key);
-    if(v!==null) memoryStore[key]=v;
-    return v!==null?v:(Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null);
-  }catch(e){
-    return Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null;
-  }
-}
-function storeSet(key,value){
-  const v=String(value);
-  memoryStore[key]=v;
-  try{window['localStorage'].setItem(key,v)}catch(e){}
-}
-function storeRemove(key){
-  delete memoryStore[key];
-  try{window['localStorage'].removeItem(key)}catch(e){}
-}
+const ARRIVAL=16*60, TICKET_KEY='fair-ticket-url';const memoryStore=Object.create(null);function storeGet(key){try{const v=window.localStorage.getItem(key);if(v!==null)memoryStore[key]=v;return v!==null?v:(Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null)}catch(e){return Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null}}function storeSet(key,value){const v=String(value);memoryStore[key]=v;try{window.localStorage.setItem(key,v)}catch(e){}}function storeRemove(key){delete memoryStore[key];try{window.localStorage.removeItem(key)}catch(e){}}
 const events=[
- {id:'arrive',start:'16:00',end:'16:18',time:'4:00',title:'Land + regroup',loc:'Entrance',map:'33.66557,-117.90177',desc:'Bathroom, water, bearings. Do not spend your first 20 minutes sprinting.',tags:['easy start'],anchor:false,levels:['chill','balanced','max']},
- {id:'taste',start:'16:18',end:'16:55',time:'4:18',title:'$5 Taste dash',loc:'Fair Square / central food',map:'33.66636,-117.90108',desc:'Pick 2–3 sample-size foods to share before the 5 PM promotion ends.',tags:['deadline','Ati-friendly options'],anchor:true,levels:['chill','balanced','max']},
- {id:'pigs',start:'16:55',end:'17:30',time:'5:00',title:'Racing Pigs',loc:'Park Plaza',map:'33.66722,-117.90302',desc:'Short, silly, memorable. Shylene chooses her pig before the race.',tags:['Shylene pick','anchor'],anchor:true,levels:['chill','balanced','max']},
- {id:'farm',start:'17:30',end:'17:58',time:'5:30',title:'Centennial Farm reset',loc:'Centennial Farm',map:'33.66599,-117.90253',desc:'Animals, gardens and a quieter half-hour before the next show.',tags:['calm','optional'],anchor:false,levels:['chill','balanced']},
- {id:'magic',start:'17:58',end:'18:46',time:'6:00',title:'Magic of Frank Thurston',loc:'OC Promenade, OC Fair & Event Center, Costa Mesa, CA',map:'33.66714,-117.90027',desc:'A 45-minute seated reset that still feels like entertainment.',tags:['show','anchor'],anchor:true,levels:['chill','balanced','max']},
- {id:'dinner',start:'18:46',end:'19:30',time:'6:50',title:'Dinner — Ati picks',loc:'Main Mall / nearby',map:'33.66700,-117.90084',desc:'One real seated meal. Ask about shared grills or fryer oil if avoiding pork strictly.',tags:['Ati picks','sit down'],anchor:false,levels:['chill','balanced','max']},
- {id:'rides',start:'19:30',end:'20:35',time:'7:30',title:'Shylene’s carnival hour',loc:'Main Carnival / Kidland',map:'33.66630,-117.89830',desc:'Fixed ride budget, 2–3 choices, and she owns the picks.',tags:['Shylene owns this','night lights'],anchor:true,levels:['chill','balanced','max']},
- {id:'music',start:'20:35',end:'21:15',time:'8:40',title:'Wander + shared dessert',loc:'Promenade / REWIND / nearby',map:'33.66685,-117.90178',desc:'Pick one Explore stop if energy is good, then split one fun dessert.',tags:['optional'],anchor:false,levels:['balanced','max']},
- {id:'finish',start:'21:15',end:'22:05',time:'9:15',title:'Night photo + choose the ending',loc:'Midway',map:'33.66630,-117.89830',desc:'Get the lights photo, then vote: one last ride, browse, music or home.',tags:['family photo'],anchor:true,levels:['chill','balanced','max']}
+ {id:'arrive',start:'16:00',end:'16:18',time:'4:00',title:'Land + regroup',loc:'Entrance',map:'33.66557,-117.90177',desc:'Bathroom, water, bearings. Do not start the night by debating the whole fair.',tags:['Easy'],levels:['chill','balanced','max']},
+ {id:'taste',start:'16:18',end:'16:55',time:'4:18',title:'$5 Taste dash',loc:'Fair Square / central food',map:'33.66636,-117.90108',desc:'Pick 2–3 sample-size foods to share before the 5 PM promotion ends.',tags:['Food','Deadline'],levels:['chill','balanced','max']},
+ {id:'pigs',start:'16:55',end:'17:30',time:'5:00',title:'Racing Pigs',loc:'Park Plaza',map:'33.66722,-117.90302',desc:'Your first real anchor. Let Shylene choose a pig before the race.',tags:['Shylene','Show'],levels:['balanced','max']},
+ {id:'farm',start:'17:30',end:'17:58',time:'5:30',title:'Centennial Farm reset',loc:'Centennial Farm',map:'33.66599,-117.90253',desc:'Animals + decompression. Shorten it if everyone is energized.',tags:['Calm','Ati'],levels:['chill','balanced','max']},
+ {id:'magic',start:'17:58',end:'18:46',time:'6:00',title:'Magic of Frank Thurston',loc:'OC Promenade Stage',map:'33.66714,-117.90027',desc:'Sit down, cool off and watch a proper show.',tags:['Show','Rest'],levels:['chill','balanced','max']},
+ {id:'dinner',start:'18:46',end:'19:30',time:'6:50',title:'Dinner — Ati picks',loc:'Main Mall / nearby',map:'33.66700,-117.90084',desc:'Choose by smell + shortest reasonable line. Pork-free first; ask about shared prep when necessary.',tags:['Ati','Food'],levels:['chill','balanced','max']},
+ {id:'rides',start:'19:30',end:'20:35',time:'7:30',title:'Shylene’s carnival hour',loc:'Main Carnival / Kidland',map:'33.66630,-117.89830',desc:'She gets 2–3 ride/game picks. Do not try to conquer the midway.',tags:['Shylene','High energy'],levels:['balanced','max']},
+ {id:'music',start:'20:35',end:'21:15',time:'8:40',title:'Wander + shared dessert',loc:'Promenade / REWIND / nearby',map:'33.66685,-117.90178',desc:'Pick something sweet, then drift into REWIND, Sand & Sea, music or whatever looks fun nearby.',tags:['Flexible','Explore'],levels:['chill','balanced','max']},
+ {id:'finish',start:'21:15',end:'22:05',time:'9:15',title:'Night photo + choose the ending',loc:'Midway',map:'33.66630,-117.89830',desc:'Lights-on family photo. Then vote: one last thing, or leave while everybody is still happy.',tags:['Family'],levels:['chill','balanced','max']}
 ];
-const prep=[
- ['🎟️','Tickets ready','Have them open before you reach the gate.'],
- ['💳','Set Shylene’s ride budget','Pick the number before the midway asks you.'],
- ['🧥','Bring one light layer','It cools down after sunset.']
-];
-const missions=[
- ['🐷','Pick the winning pig','Choose before the 5 PM race.'],
- ['✨','Rate the magic show','Give it 1–5 stars after.'],
- ['🎢','Choose the bravest ride','Shylene gets the final call.'],
- ['🍓','Try one new fair food','One bite counts.'],
- ['🐐','Funniest animal photo','Best face wins.'],
- ['📸','Night-lights family photo','Take it before everybody is tired.']
-];
-const sheets={
- hungry:{title:'Best food move right now',desc:'Use the clock first, cravings second.',choices:[
-  ['Before 5 PM','<strong>Do the $5 Taste window.</strong> Share a savory + sweet instead of buying full meals immediately.'],
-  ['After 5 PM','Sit down for dinner. Let Ati make the final food call and ask about shared prep if pork avoidance is strict.'],
-  ['Already full','Skip food now and save one shared dessert for the lights.']
- ]},
- beer:{title:'Best beer / drink move',desc:'Don’t make a separate cross-fair pilgrimage unless the drink itself is the point.',choices:[
-  ['Best family fit','<strong>Craft Brew East · Centennial Farm.</strong> Craft beer for you, frozen aguas frescas for everyone else, and it pairs with a good family stop.'],
-  ['Best beer selection','<strong>Beers of the World · Main Mall.</strong> 40+ global beer selections.'],
-  ['Cocktail mood','<strong>La Cantina · Fair Square.</strong> Palomas, margaritas, micheladas, tequila, cocktails and imported beer.'],
-  ['Already near The Hangar','<strong>Hangar Bar · Family Fairway.</strong> Beer, cocktails and refreshments without another detour.']
- ]},
- break:{title:'Reset without killing the night',desc:'A deliberate 20–45 minute reset usually buys you a much better evening.',choices:[
-  ['Quiet','Centennial Farm: animals + gardens, less midway intensity.'],
-  ['Sit','The 6 PM magic show doubles as a seated break.'],
-  ['Later','Browse indoor exhibits rather than forcing another ride block.']
- ]},
- fun:{title:'Add fun, not chaos',desc:'Give Shylene control inside a boundary.',choices:[
-  ['Best scheduled win','Make the 5 PM Racing Pigs if it is still reachable.'],
-  ['Carnival','Let Shylene choose exactly 2–3 rides from a fixed budget.'],
-  ['Mellow family option','Choose a Ferris-wheel-style ride for the lights and photo.']
- ]},
- swap:{title:'Swap this stop',desc:'You do not need to preserve the plan just because it is on the screen.',choices:[
-  ['Skip it','Mark the current stop done and jump to the next worthwhile one.'],
-  ['Need food','Use the Hungry rescue button.'],
-  ['Need calm','Use the Break rescue button and resume later.']
- ]}
-};
-function mins(t){const [h,m]=t.split(':').map(Number);return h*60+m}
-function nowLA(){
- const d=new Date();
- try{
-  const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(d);let o={};p.forEach(x=>o[x.type]=x.value);return (+o.hour)*60+(+o.minute);
- }catch(e){return d.getHours()*60+d.getMinutes()}
-}
-function clockLA(){
- const d=new Date();
- try{return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(d)}
- catch(e){return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}
-}
-function fmt(n){n=Math.max(0,Math.round(n));const h=Math.floor(n/60),m=n%60;return h?`${h}h ${m}m`:`${m}m`}
-function appleMapsURL(destination){
- const raw=String(destination||'').trim();
- const match=raw.match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/);
- if(match){
-   const lat=match[1], lon=match[2];
-   return `https://maps.apple.com/?daddr=${lat},${lon}&dirflg=w&t=m`;
- }
- return 'https://maps.apple.com/?daddr='+encodeURIComponent(raw)+'&dirflg=w&t=m';
-}
-function openAppleMaps(destination){
- if(!destination){toast('No GPS pin for this stop');return;}
- window.location.href=appleMapsURL(destination);
-}
-function pace(){return storeGet('fair-v3-pace')||'balanced'}
-function arrived(){return storeGet('fair-v3-arrived')==='1'||nowLA()>=ARRIVAL}
-function isDone(id){return storeGet('fair-v3-event-'+id)==='1'}
-function activeEvents(){const p=pace();return events.filter(e=>e.levels.includes(p))}
-function firstRelevant(){const now=nowLA(), list=activeEvents();return list.find(e=>!isDone(e.id)&&now<mins(e.end))||list.find(e=>!isDone(e.id))||list.at(-1)}
-function nextAnchorAfter(e){const list=activeEvents();const idx=list.findIndex(x=>x.id===e.id);return list.slice(idx+1).find(x=>x.anchor&&!isDone(x.id))}
-function renderPrep(){const el=document.getElementById('prepArea');el.innerHTML='';prep.forEach((x,i)=>{const done=storeGet('fair-v3-prep-'+i)==='1';const r=document.createElement('div');r.className='prep';r.innerHTML=`<i>${x[0]}</i><div><b>${x[1]}</b><span>${x[2]}</span></div><button class="${done?'done':''}">✓</button>`;r.querySelector('button').onclick=()=>{storeSet('fair-v3-prep-'+i,done?'0':'1');renderPrep();toast(done?'Reopened':'Ready ✓')};el.appendChild(r)})}
-function renderFocus(){
- const now=nowLA();document.getElementById('clock').textContent=clockLA();
- const live=arrived();document.getElementById('clockState').textContent=live?'fair mode':'before arrival';
- const prepArea=document.getElementById('prepArea'), primary=document.getElementById('primaryAction'), swap=document.getElementById('swapAction'), done=document.getElementById('doneAction');
- if(!live){
-  document.getElementById('statusTitle').textContent='Arrive about 4:00 PM';document.getElementById('statusText').textContent='$5 Taste ends at 5 — make food your first real stop.';
-  document.getElementById('focusEyebrow').textContent='Before you go';document.getElementById('focusTitle').textContent='Set up an easy night.';document.getElementById('focusDesc').textContent='Three tiny decisions now save you from doing them in the parking lot.';document.getElementById('focusWhere').textContent='🏠 Before leaving';
-  document.getElementById('countValue').textContent=fmt(ARRIVAL-now);document.getElementById('countLabel').textContent='to arrival';document.getElementById('progressBar').style.width=Math.max(0,Math.min(100,(now-(14*60))/(2*60)*100))+'%';
-  prepArea.classList.remove('hide');primary.textContent='I’m here — start fair mode';swap.classList.add('hide');done.classList.add('hide');primary.onclick=()=>{storeSet('fair-v3-arrived','1');renderAll();toast('Fair mode started 🎡')};
- }else{
-  prepArea.classList.add('hide');swap.classList.remove('hide');done.classList.remove('hide');
-  const e=firstRelevant(), anchor=nextAnchorAfter(e);
-  document.getElementById('statusTitle').textContent=now<17*60?`$5 Taste: ${fmt(17*60-now)} left`:'Fair mode is live';document.getElementById('statusText').textContent=now<17*60?'Use the deal only if it fits naturally — don’t sprint across the property.':'Follow the next good move, not the original minute-by-minute plan.';
-  document.getElementById('focusEyebrow').textContent='Do this now';document.getElementById('focusTitle').textContent=e.title;document.getElementById('focusDesc').textContent=e.desc;document.getElementById('focusWhere').textContent='📍 '+e.loc;
-  if(anchor){document.getElementById('countValue').textContent=fmt(mins(anchor.start)-now);document.getElementById('countLabel').textContent='to next anchor'}else{document.getElementById('countValue').textContent='✓';document.getElementById('countLabel').textContent='anchors done'}
-  document.getElementById('progressBar').style.width=Math.max(0,Math.min(100,(now-ARRIVAL)/(6*60)*100))+'%';
-  primary.innerHTML='<span class="appleMark"> Maps · GPS pin</span>';primary.onclick=()=>openAppleMaps(e.map||e.loc);swap.onclick=()=>openSheet('swap');done.onclick=()=>{storeSet('fair-v3-event-'+e.id,'1');renderAll();toast('Next move ready ✓')};
- }
-}
-function renderUpcoming(){const el=document.getElementById('upcoming');el.innerHTML='';const list=activeEvents().filter(e=>!isDone(e.id));const now=nowLA();let first=arrived()?list.findIndex(e=>now<mins(e.end)):0;if(first<0)first=0;list.slice(first,first+3).forEach((e,i)=>{const r=document.createElement('div');r.className='upRow'+(i===0?' now':'');r.innerHTML=`<div class="upTime">${e.time}</div><div><b>${e.title}</b><span>${e.loc}</span></div><div class="arrow">›</div>`;r.onclick=()=>switchView('plan',e.id);el.appendChild(r)})}
+const prep=[['🔋','Battery / portable charger'],['🎟️','Open tickets before reaching the gate'],['👟','Comfortable shoes + light layer']];
+const missions=[['🐷','Pick the winning pig','Choose before the race'],['🎩','Rate the magic','1–5 stars after the show'],['🎢','Bravest ride','You choose it'],['🍓','Try something new','One bite counts'],['🐐','Animal photo','Funniest one wins'],['🌈','Night lights photo','Everybody in it']];
+function mins(s){let [h,m]=s.split(':').map(Number);return h*60+m}function fmt(n){n=Math.max(0,Math.round(n));const h=Math.floor(n/60),m=n%60;return h?`${h}h ${m}m`:`${m}m`}function nowLA(){const d=new Date();try{const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(d);let o={};p.forEach(x=>o[x.type]=x.value);return(+o.hour)*60+(+o.minute)}catch(e){return d.getHours()*60+d.getMinutes()}}function clockLA(){const d=new Date();try{return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(d)}catch(e){return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}}
+function pace(){return storeGet('fair-v3-pace')||'balanced'}function arrived(){return storeGet('fair-v3-arrived')==='1'}function isDone(id){return storeGet('fair-v3-event-'+id)==='1'}function activeEvents(){const p=pace();return events.filter(e=>e.levels.includes(p))}function firstRelevant(){const now=nowLA(), list=activeEvents();return list.find(e=>!isDone(e.id)&&now<mins(e.end))||list.find(e=>!isDone(e.id))||list.at(-1)}function nextAnchorAfter(e){const list=activeEvents();const idx=list.findIndex(x=>x.id===e.id);return list.slice(idx+1).find(x=>!isDone(x.id))}function toast(s){const t=document.getElementById('toast');t.textContent=s;t.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove('show'),1400)}
+function appleMapsURL(destination){const raw=String(destination||'').trim();const match=raw.match(/^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/);if(match){const lat=match[1],lon=match[2];return`https://maps.apple.com/?daddr=${lat},${lon}&dirflg=w&t=m`}return'https://maps.apple.com/?daddr='+encodeURIComponent(raw)+'&dirflg=w&t=m'}function openAppleMaps(destination){if(!destination){toast('No GPS pin for this stop');return}window.location.href=appleMapsURL(destination)}
+function switchView(v,scrollId){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));window.scrollTo(0,0);if(scrollId)setTimeout(()=>document.getElementById('event-'+scrollId)?.scrollIntoView({behavior:'smooth',block:'center'}),60)}
+function renderPrep(){const el=document.getElementById('prepArea');el.innerHTML='';prep.forEach(x=>{const d=document.createElement('div');d.className='prepItem';d.innerHTML=`<span>${x[0]}</span>${x[1]}`;el.appendChild(d)})}
+function renderFocus(){const now=nowLA();document.getElementById('clock').textContent=clockLA();const live=arrived();document.getElementById('clockState').textContent=live?'fair mode':'before arrival';const prepArea=document.getElementById('prepArea'),primary=document.getElementById('primaryAction'),swap=document.getElementById('swapAction'),done=document.getElementById('doneAction');if(!live){const late=now>=ARRIVAL;document.getElementById('clockState').textContent=late?'not there yet':'before arrival';document.getElementById('statusTitle').textContent=late?'Not at the fair yet':'Arrive about 4:00 PM';document.getElementById('statusText').textContent=late?'Tap “I’m here” only when you actually arrive — the plan will jump to the best current move.':'$5 Taste ends at 5 — make food your first real stop.';document.getElementById('focusEyebrow').textContent=late?'On the way':'Before you go';document.getElementById('focusTitle').textContent=late?'Fair mode is ready.':'Set up an easy night.';document.getElementById('focusDesc').textContent=late?'I won’t assume you’ve arrived just because it’s after 4. Start live mode when you walk in.':'Three tiny decisions now save you from doing them in the parking lot.';document.getElementById('focusWhere').textContent=late?'🚗 On the way':'🏠 Before leaving';document.getElementById('countValue').textContent=late?'Ready':fmt(ARRIVAL-now);document.getElementById('countLabel').textContent=late?'when you arrive':'to arrival';document.getElementById('progressBar').style.width=late?'100%':Math.max(0,Math.min(100,(now-(14*60))/(2*60)*100))+'%';prepArea.classList.remove('hide');primary.textContent='I’m here — start fair mode';swap.classList.add('hide');done.classList.add('hide');primary.onclick=()=>{storeSet('fair-v3-arrived','1');renderAll();toast('Fair mode started 🎡')}}else{prepArea.classList.add('hide');swap.classList.remove('hide');done.classList.remove('hide');const e=firstRelevant(),anchor=nextAnchorAfter(e);document.getElementById('statusTitle').textContent=now<17*60?`$5 Taste: ${fmt(17*60-now)} left`:'Fair mode is live';document.getElementById('statusText').textContent=now<17*60?'Use the deal only if it fits naturally — don’t sprint across the property.':'Do the next good thing, not every possible thing.';document.getElementById('focusEyebrow').textContent='Do this now';document.getElementById('focusTitle').textContent=e.title;document.getElementById('focusDesc').textContent=e.desc;document.getElementById('focusWhere').textContent='📍 '+e.loc;document.getElementById('countValue').textContent=anchor?fmt(mins(anchor.start)-now):'Easy';document.getElementById('countLabel').textContent=anchor?'to next anchor':'finish well';document.getElementById('progressBar').style.width=Math.max(4,Math.min(100,(now-mins(e.start))/(mins(e.end)-mins(e.start))*100))+'%';primary.innerHTML='<span class="appleMark"> Maps · GPS pin</span>';primary.onclick=()=>openAppleMaps(e.map||e.loc);swap.onclick=()=>openSheet('swap');done.onclick=()=>{storeSet('fair-v3-event-'+e.id,'1');renderAll();toast('Next move ready ✓')}}}
+function renderUpcoming(){const el=document.getElementById('upcoming');el.innerHTML='';const list=activeEvents().filter(e=>!isDone(e.id));const now=nowLA();let first=list.findIndex(e=>now<mins(e.end));if(first<0)first=0;list.slice(first,first+3).forEach((e,i)=>{const r=document.createElement('div');r.className='upRow'+(i===0?' now':'');r.innerHTML=`<div class="upTime">${e.time}</div><div><b>${e.title}</b><span>${e.loc}</span></div><div class="arrow">›</div>`;r.onclick=()=>switchView('plan',e.id);el.appendChild(r)})}
 function renderTimeline(){const el=document.getElementById('timeline');el.innerHTML='';const cur=firstRelevant();activeEvents().forEach(e=>{const d=isDone(e.id),r=document.createElement('div');r.className='event'+(cur.id===e.id?' current':'');const tags=e.tags.map(t=>`<span class="tag ${t.includes('Shylene')?'shy':t.includes('Ati')?'ati':''}">${t}</span>`).join('');r.id='event-'+e.id;r.innerHTML=`<div class="eventTime">${e.time}</div><div><h3>${e.title}</h3><p><b style="color:#dfdbe4">${e.loc}</b> · ${e.desc}</p><button class="mapPill" type="button"> Maps · GPS</button><div class="tags">${tags}</div></div><button class="eventDone ${d?'done':''}">✓</button>`;r.querySelector('.mapPill').onclick=(ev)=>{ev.stopPropagation();openAppleMaps(e.map||e.loc)};r.querySelector('.eventDone').onclick=()=>{storeSet('fair-v3-event-'+e.id,d?'0':'1');renderAll();toast(d?'Reopened':'Done ✓')};el.appendChild(r)})}
 function renderMissions(){const el=document.getElementById('missions');el.innerHTML='';let n=0;missions.forEach((x,i)=>{const key='fair-v3-mission-'+i,d=storeGet(key)==='1';if(d)n++;const r=document.createElement('div');r.className='mission';r.innerHTML=`<div class="mi">${x[0]}</div><div class="mc"><b>${x[1]}</b><span>${x[2]}</span></div><button class="${d?'done':''}">✓</button>`;r.querySelector('button').onclick=()=>{storeSet(key,d?'0':'1');renderMissions();toast(d?'Mission reopened':'Mission complete ★')};el.appendChild(r)});document.getElementById('score').textContent=`${n}/6`;document.getElementById('ring').style.background=`conic-gradient(var(--violet) ${n/6*360}deg,#2a2935 0deg)`;document.getElementById('rewardTitle').textContent=n>=4?'Reward unlocked 🎉':'Reward locked';document.getElementById('rewardText').textContent=n>=4?'Shylene chooses dessert or last ride':'Complete 4 missions'}
 function renderPace(){const p=pace();document.querySelectorAll('#pace button').forEach(b=>b.classList.toggle('active',b.dataset.pace===p))}
-function openSheet(type){const s=sheets[type];document.getElementById('sheetTitle').textContent=s.title;document.getElementById('sheetDesc').textContent=s.desc;document.getElementById('sheetChoices').innerHTML=s.choices.map(x=>`<button class="choice"><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');document.getElementById('sheetBack').classList.add('show')}
-function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1100)}
-function switchView(v,id){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(id)setTimeout(()=>document.getElementById('event-'+id)?.scrollIntoView({behavior:'smooth',block:'center'}),50);else window.scrollTo({top:0,behavior:'smooth'})}
-
-function setupTickets(){
- const openSame=document.getElementById('openTicketsSame');
- const openNew=document.getElementById('openTicketsNew');
- const clear=document.getElementById('clearTicketLink');
- const save=document.getElementById('saveTicketLink');
- const input=document.getElementById('ticketUrlInput');
-
- const getTicket=()=>storeGet(TICKET_KEY)||'';
- const valid=url=>/^https:\/\/www\.etix\.com\/ticket\/online\/onlinereprint\.jsp\?/i.test(url||'');
- const sync=()=>{
-   const url=getTicket();
-   input.value=url;
-   openSame.disabled=!url;
-   openNew.disabled=!url;
-   openSame.style.opacity=url?'1':'.45';
-   openNew.style.opacity=url?'1':'.45';
-   save.textContent=url?'UPDATE SAVED LINK':'SAVE ON THIS PHONE';
- };
- const need=()=>{toast('Paste your Etix link first');input.focus()};
-
- save.onclick=()=>{
-   const url=input.value.trim();
-   if(!valid(url)){toast('Paste the Etix reprint link');return;}
-   storeSet(TICKET_KEY,url);sync();toast('Ticket link saved on this phone ✓');
- };
- openSame.onclick=()=>{
-   const url=getTicket(); if(!url){need();return;}
-   window.location.href=url;
- };
- openNew.onclick=()=>{
-   const url=getTicket(); if(!url){need();return;}
-   const w=window.open(url,'_blank','noopener,noreferrer');
-   if(!w) window.location.href=url;
- };
- clear.onclick=()=>{
-   storeRemove(TICKET_KEY);input.value='';sync();toast('Saved ticket link removed');
- };
- sync();
-}
-function setupExplore(){
- const buttons=[...document.querySelectorAll('#exploreFilters button')];
- const filterCards=[...document.querySelectorAll('#placeGrid .placeCard')];
- const mapCards=[...document.querySelectorAll('.placeCard[data-map]')];
- buttons.forEach(b=>b.onclick=()=>{buttons.forEach(x=>x.classList.toggle('active',x===b));const f=b.dataset.filter;filterCards.forEach(c=>c.classList.toggle('hide',f!=='all'&&!c.dataset.cats.split(' ').includes(f)));if(f==='beer')document.getElementById('drinksSection')?.scrollIntoView({behavior:'smooth',block:'start'});});
- mapCards.forEach(c=>{
-   const content=c.children[1];
-   if(!content||content.querySelector('.mapPill'))return;
-   const btn=document.createElement('button');
-   btn.className='mapPill';btn.type='button';btn.textContent=' Maps · GPS';
-   btn.onclick=(ev)=>{ev.stopPropagation();openAppleMaps(c.dataset.map)};
-   content.appendChild(btn);
- });
-}
+function openSheet(type){const content=document.getElementById('sheetContent');const now=nowLA();let h='';if(type==='hungry')h=`<h2>🍓 Hungry right now</h2><div class="sheetChoice"><b>Before 5: sample first</b><p>${now<1020?'Use the $5 Taste window if the nearby line is sane. Pick 2–3 things and share.':'That promo is over. Skip the scavenger hunt and choose dinner by proximity + line.'}</p></div><div class="sheetChoice"><b>Ati-friendly shortcut</b><p>Vegetarian / chicken / corn / fruit / dessert first. Ask about pork and shared prep only when it matters.</p></div>`;if(type==='beer')h=`<h2>🍺 Beer / drink</h2><div class="sheetChoice" onclick="openAppleMaps('33.66617,-117.90208')"><b>Best family fit → Craft Brew East</b><p>Centennial Farm. Craft beer for you + frozen aguas frescas at the same stop. Tap for Apple Maps.</p></div><div class="sheetChoice" onclick="openAppleMaps('33.66700,-117.90084')"><b>Beer-first → Beers of the World</b><p>Main Mall. 40+ selections. Tap for Apple Maps.</p></div><div class="sheetChoice" onclick="openAppleMaps('33.66636,-117.90108')"><b>Cocktails → La Cantina</b><p>Fair Square. Margaritas, palomas, micheladas, tequila and imported beer. Tap for Apple Maps.</p></div><div class="sheetChoice" onclick="switchView('explore');document.getElementById('sheetBack').classList.remove('show');setTimeout(()=>document.getElementById('drinksSection').scrollIntoView(),80)"><b>See all drink spots →</b><p>Open Explore for Hangar Bar and other options.</p></div>`;if(type==='break')h=`<h2>🌿 Need a reset</h2><div class="sheetChoice" onclick="openAppleMaps('33.66599,-117.90253')"><b>Centennial Farm</b><p>Animals, slower pace, easy conversation. Tap for Apple Maps.</p></div><div class="sheetChoice"><b>Sit + drink</b><p>Find shade, agua fresca or water. Ten calm minutes is better than forcing the next attraction.</p></div>`;if(type==='fun')h=`<h2>🎢 Turn the energy up</h2><div class="sheetChoice" onclick="openAppleMaps('33.66630,-117.89830')"><b>Give Shylene control</b><p>Let her pick the next ride or game. Tap for the Carnival GPS pin.</p></div><div class="sheetChoice" onclick="switchView('explore');document.getElementById('sheetBack').classList.remove('show')"><b>Explore a weird detour →</b><p>REWIND arcade, touch tank, petting farm or shopping.</p></div>`;if(type==='swap')h=`<h2>↔ Skip this. What instead?</h2><div class="sheetChoice" onclick="openSheet('break')"><b>🌿 Lower energy</b><p>Farm, shade or a sit-down reset.</p></div><div class="sheetChoice" onclick="openSheet('fun')"><b>🎢 Higher energy</b><p>Hand the next decision to Shylene.</p></div><div class="sheetChoice" onclick="switchView('explore');document.getElementById('sheetBack').classList.remove('show')"><b>✨ Wander somewhere interesting</b><p>Open the Explore tab and pick by proximity.</p></div>`;content.innerHTML=h;document.getElementById('sheetBack').classList.add('show')}
+function setupTickets(){const openSame=document.getElementById('openTicketsSame'),openNew=document.getElementById('openTicketsNew'),clear=document.getElementById('clearTicketLink'),save=document.getElementById('saveTicketLink'),input=document.getElementById('ticketUrlInput');const getTicket=()=>storeGet(TICKET_KEY)||'';const valid=url=>/^https:\/\/www\.etix\.com\/ticket\/online\/onlinereprint\.jsp\?/i.test(url||'');const sync=()=>{const url=getTicket();input.value=url;openSame.disabled=!url;openNew.disabled=!url;openSame.style.opacity=url?'1':'.45';openNew.style.opacity=url?'1':'.45';save.textContent=url?'UPDATE SAVED LINK':'SAVE ON THIS PHONE'};const need=()=>{toast('Paste your Etix link first');input.focus()};save.onclick=()=>{const url=input.value.trim();if(!valid(url)){toast('Paste the Etix reprint link');return}storeSet(TICKET_KEY,url);sync();toast('Ticket link saved on this phone ✓')};openSame.onclick=()=>{const url=getTicket();if(!url){need();return}window.location.href=url};openNew.onclick=()=>{const url=getTicket();if(!url){need();return}const w=window.open(url,'_blank','noopener,noreferrer');if(!w)window.location.href=url};clear.onclick=()=>{storeRemove(TICKET_KEY);input.value='';sync();toast('Saved ticket link removed')};sync()}
+function setupExplore(){const buttons=[...document.querySelectorAll('#exploreFilters button')];const filterCards=[...document.querySelectorAll('#placeGrid .placeCard')];const mapCards=[...document.querySelectorAll('.placeCard[data-map]')];buttons.forEach(b=>b.onclick=()=>{buttons.forEach(x=>x.classList.toggle('active',x===b));const f=b.dataset.filter;filterCards.forEach(c=>c.classList.toggle('hide',f!=='all'&&!c.dataset.cats.split(' ').includes(f)));if(f==='beer')document.getElementById('drinksSection')?.scrollIntoView({behavior:'smooth',block:'start'})});mapCards.forEach(c=>{const content=c.children[1];if(!content||content.querySelector('.mapPill'))return;const btn=document.createElement('button');btn.className='mapPill';btn.type='button';btn.textContent=' Maps · GPS';btn.onclick=(ev)=>{ev.stopPropagation();openAppleMaps(c.dataset.map)};content.appendChild(btn)})}
 function renderAll(){renderFocus();renderUpcoming();renderTimeline();renderMissions();renderPace()}
-document.querySelectorAll('.quick').forEach(b=>b.onclick=()=>openSheet(b.dataset.intent));
-document.getElementById('sheetBack').onclick=e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')};
-document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
-document.querySelectorAll('#pace button').forEach(b=>b.onclick=()=>{storeSet('fair-v3-pace',b.dataset.pace);renderAll();toast(b.dataset.pace==='chill'?'Chill pace set':b.dataset.pace==='max'?'Max fun set':'Balanced pace set')});
-try{setupTickets()}catch(e){console.warn('Tickets setup skipped',e)}
-try{setupExplore()}catch(e){console.warn('Explore setup skipped',e)}
-try{renderPrep()}catch(e){console.warn('Prep render skipped',e)}
-renderAll();
-setInterval(()=>{try{renderFocus();renderUpcoming()}catch(e){console.warn('Live refresh skipped',e)}},60000);
+document.querySelectorAll('.quick').forEach(b=>b.onclick=()=>openSheet(b.dataset.intent));document.getElementById('sheetBack').onclick=e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')};document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));const resetArrival=document.getElementById('resetArrival');if(resetArrival)resetArrival.onclick=()=>{storeRemove('fair-v3-arrived');renderAll();switchView('now');toast('Arrival reset — still on the way')};document.querySelectorAll('#pace button').forEach(b=>b.onclick=()=>{storeSet('fair-v3-pace',b.dataset.pace);renderAll();toast('Pace: '+b.dataset.pace)});try{setupTickets()}catch(e){console.warn('Tickets setup skipped',e)}try{setupExplore()}catch(e){console.warn('Explore setup skipped',e)}try{renderPrep()}catch(e){console.warn('Prep render skipped',e)}renderAll();setInterval(()=>{try{renderFocus();renderUpcoming()}catch(e){console.warn('Live refresh skipped',e)}},60000);
 </script>
-
-<script>
-/* Prevent accidental double-tap/double-click zoom while preserving pinch zoom. */
-document.addEventListener('dblclick', function(e){
-  e.preventDefault();
-}, {passive:false});
-</script>
-
+<script>document.addEventListener('dblclick',function(e){e.preventDefault()},{passive:false});</script>
 </body>
 </html>
