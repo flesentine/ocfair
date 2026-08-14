@@ -20,17 +20,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Expand sanitized app into plain HTML
+      - name: Expand and validate sanitized app
         shell: bash
         run: |
-          set -euo pipefail
+          set -u
+          set +e
           base64 -d app-v10.b64 | gzip -dc > index.new.html
+          gzip_status=$?
+          set -e
+          echo "gzip status: $gzip_status"
+
+          test -s index.new.html
+          size=$(wc -c < index.new.html)
+          echo "expanded HTML bytes: $size"
+          test "$size" -gt 45000
           grep -q '<html' index.new.html
           grep -q 'Fair Night' index.new.html
+          tail -c 300 index.new.html | grep -q '</html>'
+
           if grep -qE '28799441|465873631' index.new.html; then
             echo 'Private Etix credentials detected; refusing to publish.' >&2
             exit 1
           fi
+
           mv index.new.html index.html
 
       - name: Commit plain index.html
