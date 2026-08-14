@@ -1,10 +1,9 @@
-name: Publish plain OC Fair app
+name: Harden live OC Fair app
 
 on:
   push:
     branches: [main]
     paths:
-      - app-v10.b64
       - .github/workflows/pages.yml
   workflow_dispatch:
 
@@ -12,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  publish-source:
+  patch-live-app:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,32 +19,95 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Expand and validate sanitized app
+      - name: Patch Safari-safe runtime
         shell: bash
         run: |
-          set -u
-          set +e
-          base64 -d app-v10.b64 | gzip -dc > index.new.html
-          gzip_status=$?
-          set -e
-          echo "gzip status: $gzip_status"
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re, subprocess
 
-          test -s index.new.html
-          size=$(wc -c < index.new.html)
-          echo "expanded HTML bytes: $size"
-          test "$size" -gt 45000
-          grep -q '<html' index.new.html
-          grep -q 'Fair Night' index.new.html
-          tail -c 300 index.new.html | grep -q '</html>'
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
 
-          if grep -qE '28799441|465873631' index.new.html; then
-            echo 'Private Etix credentials detected; refusing to publish.' >&2
-            exit 1
-          fi
+          anchor = "const TICKET_KEY='fair-ticket-url';"
+          wrapper = """const TICKET_KEY='fair-ticket-url';
+          const memoryStore=Object.create(null);
+          function storeGet(key){
+            try{
+              const v=window.localStorage.getItem(key);
+              if(v!==null) memoryStore[key]=v;
+              return v!==null?v:(Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null);
+            }catch(e){
+              return Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null;
+            }
+          }
+          function storeSet(key,value){
+            const v=String(value);
+            memoryStore[key]=v;
+            try{window.localStorage.setItem(key,v)}catch(e){}
+          }
+          function storeRemove(key){
+            delete memoryStore[key];
+            try{window.localStorage.removeItem(key)}catch(e){}
+          }"""
 
-          mv index.new.html index.html
+          if 'function storeGet(key)' not in text:
+              if anchor not in text:
+                  raise SystemExit('Ticket-key insertion point missing')
+              text = text.replace(anchor, wrapper, 1)
+              text = text.replace('localStorage.getItem(', 'storeGet(')
+              text = text.replace('localStorage.setItem(', 'storeSet(')
+              text = text.replace('localStorage.removeItem(', 'storeRemove(')
 
-      - name: Commit plain index.html
+          old_time = """function nowLA(){const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());let o={};p.forEach(x=>o[x.type]=x.value);return (+o.hour)*60+(+o.minute)}
+          function clockLA(){return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(new Date())}"""
+          new_time = """function nowLA(){
+           const d=new Date();
+           try{
+            const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(d);let o={};p.forEach(x=>o[x.type]=x.value);return (+o.hour)*60+(+o.minute);
+           }catch(e){return d.getHours()*60+d.getMinutes()}
+          }
+          function clockLA(){
+           const d=new Date();
+           try{return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(d)}
+           catch(e){return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}
+          }"""
+          if old_time in text:
+              text = text.replace(old_time, new_time, 1)
+
+          old_init = "setupTickets();setupExplore();renderPrep();renderAll();setInterval(()=>{renderFocus();renderUpcoming()},60000);"
+          new_init = """try{setupTickets()}catch(e){console.warn('Tickets setup skipped',e)}
+          try{setupExplore()}catch(e){console.warn('Explore setup skipped',e)}
+          try{renderPrep()}catch(e){console.warn('Prep render skipped',e)}
+          renderAll();
+          setInterval(()=>{try{renderFocus();renderUpcoming()}catch(e){console.warn('Live refresh skipped',e)}},60000);"""
+          if old_init in text:
+              text = text.replace(old_init, new_init, 1)
+
+          text = text.replace('<title>Fair Night — Public Safe V10</title>', '<title>Fair Night — Robust Live V13</title>', 1)
+
+          if '28799441' in text or '465873631' in text:
+              raise SystemExit('Private Etix credentials detected; refusing to publish')
+          if 'localStorage.getItem(' in text or 'localStorage.setItem(' in text or 'localStorage.removeItem(' in text:
+              raise SystemExit('Unsafe direct localStorage call remains')
+          if 'function storeGet(key)' not in text:
+              raise SystemExit('Storage fallback missing')
+          if '</html>' not in text[-500:]:
+              raise SystemExit('HTML appears incomplete')
+
+          p.write_text(text, encoding='utf-8')
+
+          scripts = re.findall(r'<script[^>]*>(.*?)</script>', text, re.S)
+          for i, script in enumerate(scripts):
+              js = Path(f'/tmp/app-{i}.js')
+              js.write_text(script, encoding='utf-8')
+              subprocess.run(['node', '--check', str(js)], check=True)
+
+          print('Patched and syntax-checked live app')
+          PY
+
+      - name: Commit hardened index.html
         shell: bash
         run: |
           set -euo pipefail
@@ -53,8 +115,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
           if git diff --cached --quiet; then
-            echo 'index.html is already current.'
+            echo 'index.html already hardened.'
             exit 0
           fi
-          git commit -m 'Publish plain Safari-safe app'
+          git commit -m 'Fix Safari frozen clock and live itinerary'
           git push origin HEAD:main
