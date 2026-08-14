@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
-<title>Fair Night — Public Safe V10</title>
+<title>Fair Night — Robust Live V13</title>
 <style>
 :root{
   --bg:#09090e;--panel:#14141c;--panel2:#1c1c27;--line:rgba(255,255,255,.10);
@@ -254,6 +254,25 @@
 <script>
 const ARRIVAL=16*60;
 const TICKET_KEY='fair-ticket-url';
+const memoryStore=Object.create(null);
+function storeGet(key){
+  try{
+    const v=window['localStorage'].getItem(key);
+    if(v!==null) memoryStore[key]=v;
+    return v!==null?v:(Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null);
+  }catch(e){
+    return Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null;
+  }
+}
+function storeSet(key,value){
+  const v=String(value);
+  memoryStore[key]=v;
+  try{window['localStorage'].setItem(key,v)}catch(e){}
+}
+function storeRemove(key){
+  delete memoryStore[key];
+  try{window['localStorage'].removeItem(key)}catch(e){}
+}
 const events=[
  {id:'arrive',start:'16:00',end:'16:18',time:'4:00',title:'Land + regroup',loc:'Entrance',map:'33.66557,-117.90177',desc:'Bathroom, water, bearings. Do not spend your first 20 minutes sprinting.',tags:['easy start'],anchor:false,levels:['chill','balanced','max']},
  {id:'taste',start:'16:18',end:'16:55',time:'4:18',title:'$5 Taste dash',loc:'Fair Square / central food',map:'33.66636,-117.90108',desc:'Pick 2–3 sample-size foods to share before the 5 PM promotion ends.',tags:['deadline','Ati-friendly options'],anchor:true,levels:['chill','balanced','max']},
@@ -307,8 +326,17 @@ const sheets={
  ]}
 };
 function mins(t){const [h,m]=t.split(':').map(Number);return h*60+m}
-function nowLA(){const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());let o={};p.forEach(x=>o[x.type]=x.value);return (+o.hour)*60+(+o.minute)}
-function clockLA(){return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(new Date())}
+function nowLA(){
+ const d=new Date();
+ try{
+  const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(d);let o={};p.forEach(x=>o[x.type]=x.value);return (+o.hour)*60+(+o.minute);
+ }catch(e){return d.getHours()*60+d.getMinutes()}
+}
+function clockLA(){
+ const d=new Date();
+ try{return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(d)}
+ catch(e){return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}
+}
 function fmt(n){n=Math.max(0,Math.round(n));const h=Math.floor(n/60),m=n%60;return h?`${h}h ${m}m`:`${m}m`}
 function appleMapsURL(destination){
  const raw=String(destination||'').trim();
@@ -323,13 +351,13 @@ function openAppleMaps(destination){
  if(!destination){toast('No GPS pin for this stop');return;}
  window.location.href=appleMapsURL(destination);
 }
-function pace(){return localStorage.getItem('fair-v3-pace')||'balanced'}
-function arrived(){return localStorage.getItem('fair-v3-arrived')==='1'||nowLA()>=ARRIVAL}
-function isDone(id){return localStorage.getItem('fair-v3-event-'+id)==='1'}
+function pace(){return storeGet('fair-v3-pace')||'balanced'}
+function arrived(){return storeGet('fair-v3-arrived')==='1'||nowLA()>=ARRIVAL}
+function isDone(id){return storeGet('fair-v3-event-'+id)==='1'}
 function activeEvents(){const p=pace();return events.filter(e=>e.levels.includes(p))}
 function firstRelevant(){const now=nowLA(), list=activeEvents();return list.find(e=>!isDone(e.id)&&now<mins(e.end))||list.find(e=>!isDone(e.id))||list.at(-1)}
 function nextAnchorAfter(e){const list=activeEvents();const idx=list.findIndex(x=>x.id===e.id);return list.slice(idx+1).find(x=>x.anchor&&!isDone(x.id))}
-function renderPrep(){const el=document.getElementById('prepArea');el.innerHTML='';prep.forEach((x,i)=>{const done=localStorage.getItem('fair-v3-prep-'+i)==='1';const r=document.createElement('div');r.className='prep';r.innerHTML=`<i>${x[0]}</i><div><b>${x[1]}</b><span>${x[2]}</span></div><button class="${done?'done':''}">✓</button>`;r.querySelector('button').onclick=()=>{localStorage.setItem('fair-v3-prep-'+i,done?'0':'1');renderPrep();toast(done?'Reopened':'Ready ✓')};el.appendChild(r)})}
+function renderPrep(){const el=document.getElementById('prepArea');el.innerHTML='';prep.forEach((x,i)=>{const done=storeGet('fair-v3-prep-'+i)==='1';const r=document.createElement('div');r.className='prep';r.innerHTML=`<i>${x[0]}</i><div><b>${x[1]}</b><span>${x[2]}</span></div><button class="${done?'done':''}">✓</button>`;r.querySelector('button').onclick=()=>{storeSet('fair-v3-prep-'+i,done?'0':'1');renderPrep();toast(done?'Reopened':'Ready ✓')};el.appendChild(r)})}
 function renderFocus(){
  const now=nowLA();document.getElementById('clock').textContent=clockLA();
  const live=arrived();document.getElementById('clockState').textContent=live?'fair mode':'before arrival';
@@ -338,7 +366,7 @@ function renderFocus(){
   document.getElementById('statusTitle').textContent='Arrive about 4:00 PM';document.getElementById('statusText').textContent='$5 Taste ends at 5 — make food your first real stop.';
   document.getElementById('focusEyebrow').textContent='Before you go';document.getElementById('focusTitle').textContent='Set up an easy night.';document.getElementById('focusDesc').textContent='Three tiny decisions now save you from doing them in the parking lot.';document.getElementById('focusWhere').textContent='🏠 Before leaving';
   document.getElementById('countValue').textContent=fmt(ARRIVAL-now);document.getElementById('countLabel').textContent='to arrival';document.getElementById('progressBar').style.width=Math.max(0,Math.min(100,(now-(14*60))/(2*60)*100))+'%';
-  prepArea.classList.remove('hide');primary.textContent='I’m here — start fair mode';swap.classList.add('hide');done.classList.add('hide');primary.onclick=()=>{localStorage.setItem('fair-v3-arrived','1');renderAll();toast('Fair mode started 🎡')};
+  prepArea.classList.remove('hide');primary.textContent='I’m here — start fair mode';swap.classList.add('hide');done.classList.add('hide');primary.onclick=()=>{storeSet('fair-v3-arrived','1');renderAll();toast('Fair mode started 🎡')};
  }else{
   prepArea.classList.add('hide');swap.classList.remove('hide');done.classList.remove('hide');
   const e=firstRelevant(), anchor=nextAnchorAfter(e);
@@ -346,12 +374,12 @@ function renderFocus(){
   document.getElementById('focusEyebrow').textContent='Do this now';document.getElementById('focusTitle').textContent=e.title;document.getElementById('focusDesc').textContent=e.desc;document.getElementById('focusWhere').textContent='📍 '+e.loc;
   if(anchor){document.getElementById('countValue').textContent=fmt(mins(anchor.start)-now);document.getElementById('countLabel').textContent='to next anchor'}else{document.getElementById('countValue').textContent='✓';document.getElementById('countLabel').textContent='anchors done'}
   document.getElementById('progressBar').style.width=Math.max(0,Math.min(100,(now-ARRIVAL)/(6*60)*100))+'%';
-  primary.innerHTML='<span class="appleMark"> Maps · GPS pin</span>';primary.onclick=()=>openAppleMaps(e.map||e.loc);swap.onclick=()=>openSheet('swap');done.onclick=()=>{localStorage.setItem('fair-v3-event-'+e.id,'1');renderAll();toast('Next move ready ✓')};
+  primary.innerHTML='<span class="appleMark"> Maps · GPS pin</span>';primary.onclick=()=>openAppleMaps(e.map||e.loc);swap.onclick=()=>openSheet('swap');done.onclick=()=>{storeSet('fair-v3-event-'+e.id,'1');renderAll();toast('Next move ready ✓')};
  }
 }
 function renderUpcoming(){const el=document.getElementById('upcoming');el.innerHTML='';const list=activeEvents().filter(e=>!isDone(e.id));const now=nowLA();let first=arrived()?list.findIndex(e=>now<mins(e.end)):0;if(first<0)first=0;list.slice(first,first+3).forEach((e,i)=>{const r=document.createElement('div');r.className='upRow'+(i===0?' now':'');r.innerHTML=`<div class="upTime">${e.time}</div><div><b>${e.title}</b><span>${e.loc}</span></div><div class="arrow">›</div>`;r.onclick=()=>switchView('plan',e.id);el.appendChild(r)})}
-function renderTimeline(){const el=document.getElementById('timeline');el.innerHTML='';const cur=firstRelevant();activeEvents().forEach(e=>{const d=isDone(e.id),r=document.createElement('div');r.className='event'+(cur.id===e.id?' current':'');const tags=e.tags.map(t=>`<span class="tag ${t.includes('Shylene')?'shy':t.includes('Ati')?'ati':''}">${t}</span>`).join('');r.id='event-'+e.id;r.innerHTML=`<div class="eventTime">${e.time}</div><div><h3>${e.title}</h3><p><b style="color:#dfdbe4">${e.loc}</b> · ${e.desc}</p><button class="mapPill" type="button"> Maps · GPS</button><div class="tags">${tags}</div></div><button class="eventDone ${d?'done':''}">✓</button>`;r.querySelector('.mapPill').onclick=(ev)=>{ev.stopPropagation();openAppleMaps(e.map||e.loc)};r.querySelector('.eventDone').onclick=()=>{localStorage.setItem('fair-v3-event-'+e.id,d?'0':'1');renderAll();toast(d?'Reopened':'Done ✓')};el.appendChild(r)})}
-function renderMissions(){const el=document.getElementById('missions');el.innerHTML='';let n=0;missions.forEach((x,i)=>{const key='fair-v3-mission-'+i,d=localStorage.getItem(key)==='1';if(d)n++;const r=document.createElement('div');r.className='mission';r.innerHTML=`<div class="mi">${x[0]}</div><div class="mc"><b>${x[1]}</b><span>${x[2]}</span></div><button class="${d?'done':''}">✓</button>`;r.querySelector('button').onclick=()=>{localStorage.setItem(key,d?'0':'1');renderMissions();toast(d?'Mission reopened':'Mission complete ★')};el.appendChild(r)});document.getElementById('score').textContent=`${n}/6`;document.getElementById('ring').style.background=`conic-gradient(var(--violet) ${n/6*360}deg,#2a2935 0deg)`;document.getElementById('rewardTitle').textContent=n>=4?'Reward unlocked 🎉':'Reward locked';document.getElementById('rewardText').textContent=n>=4?'Shylene chooses dessert or last ride':'Complete 4 missions'}
+function renderTimeline(){const el=document.getElementById('timeline');el.innerHTML='';const cur=firstRelevant();activeEvents().forEach(e=>{const d=isDone(e.id),r=document.createElement('div');r.className='event'+(cur.id===e.id?' current':'');const tags=e.tags.map(t=>`<span class="tag ${t.includes('Shylene')?'shy':t.includes('Ati')?'ati':''}">${t}</span>`).join('');r.id='event-'+e.id;r.innerHTML=`<div class="eventTime">${e.time}</div><div><h3>${e.title}</h3><p><b style="color:#dfdbe4">${e.loc}</b> · ${e.desc}</p><button class="mapPill" type="button"> Maps · GPS</button><div class="tags">${tags}</div></div><button class="eventDone ${d?'done':''}">✓</button>`;r.querySelector('.mapPill').onclick=(ev)=>{ev.stopPropagation();openAppleMaps(e.map||e.loc)};r.querySelector('.eventDone').onclick=()=>{storeSet('fair-v3-event-'+e.id,d?'0':'1');renderAll();toast(d?'Reopened':'Done ✓')};el.appendChild(r)})}
+function renderMissions(){const el=document.getElementById('missions');el.innerHTML='';let n=0;missions.forEach((x,i)=>{const key='fair-v3-mission-'+i,d=storeGet(key)==='1';if(d)n++;const r=document.createElement('div');r.className='mission';r.innerHTML=`<div class="mi">${x[0]}</div><div class="mc"><b>${x[1]}</b><span>${x[2]}</span></div><button class="${d?'done':''}">✓</button>`;r.querySelector('button').onclick=()=>{storeSet(key,d?'0':'1');renderMissions();toast(d?'Mission reopened':'Mission complete ★')};el.appendChild(r)});document.getElementById('score').textContent=`${n}/6`;document.getElementById('ring').style.background=`conic-gradient(var(--violet) ${n/6*360}deg,#2a2935 0deg)`;document.getElementById('rewardTitle').textContent=n>=4?'Reward unlocked 🎉':'Reward locked';document.getElementById('rewardText').textContent=n>=4?'Shylene chooses dessert or last ride':'Complete 4 missions'}
 function renderPace(){const p=pace();document.querySelectorAll('#pace button').forEach(b=>b.classList.toggle('active',b.dataset.pace===p))}
 function openSheet(type){const s=sheets[type];document.getElementById('sheetTitle').textContent=s.title;document.getElementById('sheetDesc').textContent=s.desc;document.getElementById('sheetChoices').innerHTML=s.choices.map(x=>`<button class="choice"><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');document.getElementById('sheetBack').classList.add('show')}
 function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1100)}
@@ -364,7 +392,7 @@ function setupTickets(){
  const save=document.getElementById('saveTicketLink');
  const input=document.getElementById('ticketUrlInput');
 
- const getTicket=()=>localStorage.getItem(TICKET_KEY)||'';
+ const getTicket=()=>storeGet(TICKET_KEY)||'';
  const valid=url=>/^https:\/\/www\.etix\.com\/ticket\/online\/onlinereprint\.jsp\?/i.test(url||'');
  const sync=()=>{
    const url=getTicket();
@@ -380,7 +408,7 @@ function setupTickets(){
  save.onclick=()=>{
    const url=input.value.trim();
    if(!valid(url)){toast('Paste the Etix reprint link');return;}
-   localStorage.setItem(TICKET_KEY,url);sync();toast('Ticket link saved on this phone ✓');
+   storeSet(TICKET_KEY,url);sync();toast('Ticket link saved on this phone ✓');
  };
  openSame.onclick=()=>{
    const url=getTicket(); if(!url){need();return;}
@@ -392,7 +420,7 @@ function setupTickets(){
    if(!w) window.location.href=url;
  };
  clear.onclick=()=>{
-   localStorage.removeItem(TICKET_KEY);input.value='';sync();toast('Saved ticket link removed');
+   storeRemove(TICKET_KEY);input.value='';sync();toast('Saved ticket link removed');
  };
  sync();
 }
@@ -410,12 +438,16 @@ function setupExplore(){
    content.appendChild(btn);
  });
 }
-function renderAll(){renderFocus();renderUpcoming();renderTimeline()');renderMissions(renderPace()}
+function renderAll(){renderFocus();renderUpcoming();renderTimeline();renderMissions();renderPace()}
 document.querySelectorAll('.quick').forEach(b=>b.onclick=()=>openSheet(b.dataset.intent));
 document.getElementById('sheetBack').onclick=e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')};
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
-document.querySelectorAll('#pace button').forEach(b=>b.onclick=()=>{localStorage.setItem('fair-v3-pace',b.dataset.pace);renderAll();toast(b.dataset.pace==='chill'?'Chill pace set':b.dataset.pace==='max'?'Max fun set':'Balanced pace set')});
-setupTickets();setupExplore();renderPrep();renderAll();setInterval(()=>{renderFocus();renderUpcoming()},60000);
+document.querySelectorAll('#pace button').forEach(b=>b.onclick=()=>{storeSet('fair-v3-pace',b.dataset.pace);renderAll();toast(b.dataset.pace==='chill'?'Chill pace set':b.dataset.pace==='max'?'Max fun set':'Balanced pace set')});
+try{setupTickets()}catch(e){console.warn('Tickets setup skipped',e)}
+try{setupExplore()}catch(e){console.warn('Explore setup skipped',e)}
+try{renderPrep()}catch(e){console.warn('Prep render skipped',e)}
+renderAll();
+setInterval(()=>{try{renderFocus();renderUpcoming()}catch(e){console.warn('Live refresh skipped',e)}},60000);
 </script>
 
 <script>
