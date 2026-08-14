@@ -1,4 +1,4 @@
-name: Repair live OC Fair app
+name: Apply OC Fair readability pass
 
 on:
   push:
@@ -11,113 +11,49 @@ permissions:
   contents: write
 
 jobs:
-  repair-live-app:
+  readability:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Repair and verify exact live build
+      - name: Add high-contrast outdoor CSS
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
+          python3 - <<'PY'
           from pathlib import Path
-          import re, subprocess, hashlib
-
-          p = Path('index.html')
-          text = p.read_text(encoding='utf-8')
-
-          # Repair the byte corruption introduced by the bad gzip payload recovery.
-          broken = "function renderAll(){renderFocus();renderUpcoming();renderTimeline()');renderMissions(renderPace()}"
-          fixed  = "function renderAll(){renderFocus();renderUpcoming();renderTimeline();renderMissions();renderPace()}"
-          if broken in text:
-              text = text.replace(broken, fixed, 1)
-
-          # Swap direct localStorage calls before inserting the wrapper itself.
-          text = text.replace('localStorage.getItem(', 'storeGet(')
-          text = text.replace('localStorage.setItem(', 'storeSet(')
-          text = text.replace('localStorage.removeItem(', 'storeRemove(')
-
-          anchor = "const TICKET_KEY='fair-ticket-url';"
-          wrapper = """const TICKET_KEY='fair-ticket-url';
-          const memoryStore=Object.create(null);
-          function storeGet(key){
-            try{
-              const v=window['localStorage'].getItem(key);
-              if(v!==null) memoryStore[key]=v;
-              return v!==null?v:(Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null);
-            }catch(e){
-              return Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null;
-            }
-          }
-          function storeSet(key,value){
-            const v=String(value);
-            memoryStore[key]=v;
-            try{window['localStorage'].setItem(key,v)}catch(e){}
-          }
-          function storeRemove(key){
-            delete memoryStore[key];
-            try{window['localStorage'].removeItem(key)}catch(e){}
-          }"""
-          if 'function storeGet(key)' not in text:
-              if anchor not in text:
-                  raise SystemExit('Ticket-key insertion point missing')
-              text = text.replace(anchor, wrapper, 1)
-
-          old_time = """function nowLA(){const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());let o={};p.forEach(x=>o[x.type]=x.value);return (+o.hour)*60+(+o.minute)}
-          function clockLA(){return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(new Date())}"""
-          new_time = """function nowLA(){
-           const d=new Date();
-           try{
-            const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(d);let o={};p.forEach(x=>o[x.type]=x.value);return (+o.hour)*60+(+o.minute);
-           }catch(e){return d.getHours()*60+d.getMinutes()}
-          }
-          function clockLA(){
-           const d=new Date();
-           try{return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(d)}
-           catch(e){return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}
-          }"""
-          if old_time in text:
-              text = text.replace(old_time, new_time, 1)
-
-          old_init = "setupTickets();setupExplore();renderPrep();renderAll();setInterval(()=>{renderFocus();renderUpcoming()},60000);"
-          new_init = """try{setupTickets()}catch(e){console.warn('Tickets setup skipped',e)}
-          try{setupExplore()}catch(e){console.warn('Explore setup skipped',e)}
-          try{renderPrep()}catch(e){console.warn('Prep render skipped',e)}
-          renderAll();
-          setInterval(()=>{try{renderFocus();renderUpcoming()}catch(e){console.warn('Live refresh skipped',e)}},60000);"""
-          if old_init in text:
-              text = text.replace(old_init, new_init, 1)
-
-          text = text.replace('<title>Fair Night — Public Safe V10</title>', '<title>Fair Night — Robust Live V13</title>', 1)
-
-          if '28799441' in text or '465873631' in text:
-              raise SystemExit('Private Etix credentials detected; refusing to publish')
-          if 'localStorage.getItem(' in text or 'localStorage.setItem(' in text or 'localStorage.removeItem(' in text:
-              raise SystemExit('Unsafe direct localStorage call remains')
-          if '</html>' not in text[-500:]:
-              raise SystemExit('HTML appears incomplete')
-
-          p.write_text(text, encoding='utf-8')
-
-          scripts = re.findall(r'<script[^>]*>(.*?)</script>', text, re.S)
-          for i, script in enumerate(scripts):
-              js = Path(f'/tmp/app-{i}.js')
-              js.write_text(script, encoding='utf-8')
-              subprocess.run(['node', '--check', str(js)], check=True)
-
-          digest = hashlib.sha256(text.encode('utf-8')).hexdigest()
-          expected = '5bfbbe19941a6145f7f639ac304cbc22aa955696612d363601260246d440e124'
-          print('SHA-256:', digest)
-          if digest != expected:
-              raise SystemExit(f'Build differs from verified clean target: {digest}')
-          print('Exact verified build produced')
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          if '<style id="readability-v15">' in s:
+              print('Readability pass already present')
+              raise SystemExit(0)
+          css='''<style id="readability-v15">
+:root{--bg:#08080d;--panel:#1b1b24;--panel2:#25242f;--line:#45434f;--text:#fff;--muted:#d2cdd7}
+body{font-size:16px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.topbar{background:rgba(8,8,13,.97);border-bottom-color:#33313b;padding-left:18px;padding-right:18px}
+.brand{gap:12px}.brandIcon{width:46px;height:46px;font-size:26px}.brand h1{font-size:21px;line-height:1.15}.brand p{font-size:14px;color:#d1ccd6;margin-top:4px}.clock b{font-size:20px}.clock span{font-size:11px;letter-spacing:.10em;color:#c7c1cc;margin-top:3px}
+.pad{padding:16px 16px 0}.section{padding:22px 16px 0}.statusStrip{padding:15px 16px;border-color:rgba(255,209,93,.42);background:linear-gradient(120deg,rgba(255,209,93,.17),rgba(255,79,134,.10))}.statusCopy{display:block;line-height:1.35}.statusCopy b{display:block;font-size:16px;margin-bottom:4px}.statusCopy span{display:block;font-size:14px;color:#eee9ef;line-height:1.45}.dot{width:12px;height:12px;flex:0 0 auto}
+.focusCard{padding:22px;border-color:#494653;background:radial-gradient(circle at 100% 0,rgba(255,79,134,.20),transparent 34%),linear-gradient(160deg,#20202a,#15151c)}.eyebrow{font-size:12px;letter-spacing:.12em}.focusText h1{font-size:38px;line-height:1.02;margin:10px 0 12px}.focusText p{font-size:17px;line-height:1.5;color:#e1dce5}.where{font-size:13px;padding:9px 12px;color:#fff;border-color:#514e5c;background:#2c2a36}.count b{font-size:32px}.count span{font-size:10.5px;line-height:1.45;letter-spacing:.10em;color:#d0cad4}.progress{height:8px;background:#3a3844;margin:18px 0}
+.prepItem{font-size:13px;line-height:1.35;padding:11px 12px;background:#25242f;border-color:#403e49}.actionGrid{gap:9px}.action{min-height:58px;font-size:14px;line-height:1.2;border-color:#504d59;background:#2a2934}.action.done{color:#c5f8dc;border-color:#426454;background:#1c352b}.quickRow{gap:10px;margin-top:13px}.quick{height:82px;font-size:15px;border-color:#45424d;background:#191922}.quick span{font-size:25px;margin-bottom:7px}
+.sectionHead{margin-bottom:13px}.sectionHead h2{font-size:27px}.sectionHead span{font-size:11px;letter-spacing:.10em;color:#c4bec9}.upcoming{gap:9px}.upRow{grid-template-columns:62px 1fr 20px;gap:10px;padding:15px;border-color:#403e49;background:#1a1a22}.upRow.now{border-color:rgba(255,209,93,.52)}.upTime{font-size:14px}.upRow b{font-size:16px;line-height:1.25}.upRow span{font-size:13px;line-height:1.35;color:#c9c3ce;margin-top:4px}.arrow{color:#aaa4af}
+.timeline{gap:10px}.event{grid-template-columns:52px 1fr 38px;gap:10px;padding:14px;border-color:#403e49;background:#1b1b24}.eventTime{font-size:13px}.event h3{font-size:16px}.event p{font-size:13px;line-height:1.45;color:#cec8d2;margin-top:5px}.tag{font-size:10.5px;padding:5px 8px;color:#e0dae4;background:#302f3b}.event .mapPill{font-size:11.5px;min-height:36px}.event .eventDone{width:36px;height:36px}.pace button{font-size:12px;padding:11px 5px;color:#c8c2cc}
+.mission{grid-template-columns:42px 1fr 38px;gap:10px;padding:14px;border-color:#403e49;background:#1b1b24}.mi{font-size:25px}.mc b{font-size:15px}.mc span{font-size:12.5px;line-height:1.4;color:#c9c3ce;margin-top:4px}.mission button{width:36px;height:36px}.reward h3{font-size:17px}.reward p{font-size:13px;line-height:1.45;color:#cbc5cf}
+.moreCard,.card{padding:17px;border-color:#403e49;background:#1b1b24}.moreCard h3,.card h3{font-size:16px;margin-bottom:8px}.moreCard p,.card p{font-size:13.5px;line-height:1.5;color:#d0cad4}.safe{color:#b9f5d4!important}.warn{color:#ffe3a9!important}.linkRow a,.miniBtn{min-height:46px;font-size:12px;border-color:#494651;background:#292832}
+.exploreHero{padding:20px;border-color:#46434f}.exploreHero h2{font-size:30px}.exploreHero p{font-size:14.5px;line-height:1.5;color:#d0cad4}.filterBar button{font-size:12px;padding:10px 14px;color:#d0cad4}.spotlight b{font-size:17px}.spotlight p{font-size:13.5px;line-height:1.5;color:#ddd6e0}.spotTags span{font-size:10.5px;padding:5px 8px}
+.placeCard{grid-template-columns:52px 1fr 20px;gap:12px;padding:15px;border-color:#403e49;background:#1b1b24}.placeIcon{width:52px;height:52px;font-size:27px}.placeCard h3{font-size:15.5px;margin-bottom:5px}.placeCard p{font-size:13px;line-height:1.45;color:#cec8d2}.placeMeta span{font-size:10.5px;padding:5px 7px}.mapPill{font-size:11.5px;min-height:38px;color:#d4f6ff;border-color:rgba(105,224,255,.32)}
+.sheet{background:#202029;border-color:#484551}.sheet h2{font-size:23px}.sheetChoice{padding:14px;background:#2a2934}.sheetChoice b{font-size:15px}.sheetChoice p{font-size:13px;line-height:1.45;color:#d0cad4}.toast{font-size:12px}
+.nav{background:rgba(9,9,14,.98);border-top-color:#34313c}.nav button{color:#aaa4b0;font-size:9.5px;line-height:1.1;padding:8px 2px 6px}.nav button span{font-size:21px}.nav button.active{background:#25242f;color:#fff}
+@media(max-width:370px){.focusText h1{font-size:34px}.focusText p{font-size:16px}.nav button{font-size:8.5px}}
+</style>'''
+          s=s.replace('</head>',css+'\n</head>',1)
+          s=s.replace('Manual Arrival V14','Outdoor Readability V15')
+          p.write_text(s,encoding='utf-8')
           PY
 
-      - name: Commit repaired index.html
+      - name: Commit readable app
         shell: bash
         run: |
           set -euo pipefail
@@ -125,8 +61,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
           if git diff --cached --quiet; then
-            echo 'index.html already matches verified build.'
+            echo 'No changes needed.'
             exit 0
           fi
-          git commit -m 'Repair live clock and itinerary runtime'
+          git commit -m 'Improve outdoor readability and contrast'
           git push origin HEAD:main
