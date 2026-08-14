@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0a0a0f">
 <title>Fair Night</title>
 <style>
-html,body{margin:0;min-height:100%;background:#09090e;color:#fffaf4;font-family:Inter,system-ui,-apple-system,"SF Pro Display",sans-serif}body{display:grid;place-items:center}.boot{text-align:center;padding:28px}.wheel{font-size:42px}.boot b{display:block;margin-top:10px;font-size:18px}.boot span{display:block;margin-top:6px;color:#aaa7b6;font-size:13px;line-height:1.45}.err{color:#ffb09f;max-width:360px}
+html,body{margin:0;min-height:100%;background:#09090e;color:#fffaf4;font-family:Inter,system-ui,-apple-system,"SF Pro Display",sans-serif}body{display:grid;place-items:center}.boot{text-align:center;padding:28px}.wheel{font-size:42px}.boot b{display:block;margin-top:10px;font-size:18px}.boot span{display:block;margin-top:6px;color:#aaa7b6;font-size:13px;line-height:1.45}.err{color:#ffb09f;max-width:380px}
 </style>
 </head>
 <body>
@@ -15,20 +15,24 @@ html,body{margin:0;min-height:100%;background:#09090e;color:#fffaf4;font-family:
 (async()=>{
   const boot=document.getElementById('boot');
   try{
-    if(!('DecompressionStream' in window)) throw new Error('This browser is too old for the compact app build.');
-    const b64=(await fetch('./app.b64',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('App payload not found');return r.text()})).trim();
+    if(!('DecompressionStream' in window)) throw new Error('This browser needs a newer Safari/Chrome version.');
+    const payloadUrl='/ocfair/app-v10.b64?v=10';
+    const response=await fetch(payloadUrl,{cache:'no-store'});
+    if(!response.ok) throw new Error(`App payload returned ${response.status}`);
+    const b64=(await response.text()).trim();
+    if(!b64) throw new Error('App payload was empty');
     const bin=atob(b64), bytes=new Uint8Array(bin.length);
     for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
     const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
     const app=await new Response(stream).text();
+    if(!app.includes('<!doctype html>')&&!app.includes('<html')) throw new Error('App payload could not be decoded');
     document.open();
     document.write(app);
     document.close();
   }catch(err){
-    boot.innerHTML='<div class="wheel">🎡</div><b>Couldn’t open Fair Night</b><span class="err">'+String(err.message||err)+'</span>';
+    boot.innerHTML='<div class="wheel">🎡</div><b>Couldn’t open Fair Night</b><span class="err">'+String(err.message||err)+'</span><span style="margin-top:12px"><button onclick="location.reload()" style="border:0;border-radius:12px;padding:10px 16px;background:#ff4f86;color:white;font-weight:800">Try again</button></span>';
   }
 })();
 </script>
-<!-- deployment trigger -->
 </body>
 </html>
