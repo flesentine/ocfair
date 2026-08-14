@@ -1,4 +1,4 @@
-name: Harden live OC Fair app
+name: Repair live OC Fair app
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  patch-live-app:
+  repair-live-app:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,23 +19,34 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Patch Safari-safe runtime
+      - name: Repair and verify exact live build
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
-          import re, subprocess
+          import re, subprocess, hashlib
 
           p = Path('index.html')
           text = p.read_text(encoding='utf-8')
+
+          # Repair the byte corruption introduced by the bad gzip payload recovery.
+          broken = "function renderAll(){renderFocus();renderUpcoming();renderTimeline()');renderMissions(renderPace()}"
+          fixed  = "function renderAll(){renderFocus();renderUpcoming();renderTimeline();renderMissions();renderPace()}"
+          if broken in text:
+              text = text.replace(broken, fixed, 1)
+
+          # Swap direct localStorage calls before inserting the wrapper itself.
+          text = text.replace('localStorage.getItem(', 'storeGet(')
+          text = text.replace('localStorage.setItem(', 'storeSet(')
+          text = text.replace('localStorage.removeItem(', 'storeRemove(')
 
           anchor = "const TICKET_KEY='fair-ticket-url';"
           wrapper = """const TICKET_KEY='fair-ticket-url';
           const memoryStore=Object.create(null);
           function storeGet(key){
             try{
-              const v=window.localStorage.getItem(key);
+              const v=window['localStorage'].getItem(key);
               if(v!==null) memoryStore[key]=v;
               return v!==null?v:(Object.prototype.hasOwnProperty.call(memoryStore,key)?memoryStore[key]:null);
             }catch(e){
@@ -45,20 +56,16 @@ jobs:
           function storeSet(key,value){
             const v=String(value);
             memoryStore[key]=v;
-            try{window.localStorage.setItem(key,v)}catch(e){}
+            try{window['localStorage'].setItem(key,v)}catch(e){}
           }
           function storeRemove(key){
             delete memoryStore[key];
-            try{window.localStorage.removeItem(key)}catch(e){}
+            try{window['localStorage'].removeItem(key)}catch(e){}
           }"""
-
           if 'function storeGet(key)' not in text:
               if anchor not in text:
                   raise SystemExit('Ticket-key insertion point missing')
               text = text.replace(anchor, wrapper, 1)
-              text = text.replace('localStorage.getItem(', 'storeGet(')
-              text = text.replace('localStorage.setItem(', 'storeSet(')
-              text = text.replace('localStorage.removeItem(', 'storeRemove(')
 
           old_time = """function nowLA(){const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());let o={};p.forEach(x=>o[x.type]=x.value);return (+o.hour)*60+(+o.minute)}
           function clockLA(){return new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit'}).format(new Date())}"""
@@ -91,8 +98,6 @@ jobs:
               raise SystemExit('Private Etix credentials detected; refusing to publish')
           if 'localStorage.getItem(' in text or 'localStorage.setItem(' in text or 'localStorage.removeItem(' in text:
               raise SystemExit('Unsafe direct localStorage call remains')
-          if 'function storeGet(key)' not in text:
-              raise SystemExit('Storage fallback missing')
           if '</html>' not in text[-500:]:
               raise SystemExit('HTML appears incomplete')
 
@@ -104,10 +109,15 @@ jobs:
               js.write_text(script, encoding='utf-8')
               subprocess.run(['node', '--check', str(js)], check=True)
 
-          print('Patched and syntax-checked live app')
+          digest = hashlib.sha256(text.encode('utf-8')).hexdigest()
+          expected = '5bfbbe19941a6145f7f639ac304cbc22aa955696612d363601260246d440e124'
+          print('SHA-256:', digest)
+          if digest != expected:
+              raise SystemExit(f'Build differs from verified clean target: {digest}')
+          print('Exact verified build produced')
           PY
 
-      - name: Commit hardened index.html
+      - name: Commit repaired index.html
         shell: bash
         run: |
           set -euo pipefail
@@ -115,8 +125,8 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
           if git diff --cached --quiet; then
-            echo 'index.html already hardened.'
+            echo 'index.html already matches verified build.'
             exit 0
           fi
-          git commit -m 'Fix Safari frozen clock and live itinerary'
+          git commit -m 'Repair live clock and itinerary runtime'
           git push origin HEAD:main
