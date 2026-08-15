@@ -1,0 +1,55 @@
+name: Install UX V19
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/install-ux-v19.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate UX JavaScript
+        run: node --check nearby-v18.js
+      - name: Bump asset version
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('<title>Fair Night — GPS Near Me V18</title>','<title>Fair Night — Clean UX V19</title>',1)
+          s=s.replace('nearby-v18.css?v=18','nearby-v18.css?v=19')
+          s=s.replace('nearby-v18.js?v=18','nearby-v18.js?v=19')
+          if 'nearby-v18.css?v=19' not in s or 'nearby-v18.js?v=19' not in s:
+              raise SystemExit('V19 asset links missing')
+          if '28799441' in s or '465873631' in s:
+              raise SystemExit('Private Etix credentials detected')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Validate app JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf-8')
+          blocks=re.findall(r'<script(?: [^>]*)?>(.*?)</script>',s,re.S)
+          inline=[b for b in blocks if b.strip()]
+          Path('/tmp/app.js').write_text(max(inline,key=len),encoding='utf-8')
+          PY
+          node --check /tmp/app.js
+      - name: Commit V19
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Deploy cleaned-up mobile UX V19'
+          git push origin HEAD:main
