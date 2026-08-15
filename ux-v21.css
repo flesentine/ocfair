@@ -1,0 +1,140 @@
+/* V21 — hierarchy, spacing, and touch cleanup */
+
+/* Keep the palette from V20, but flatten the UI and increase readable type. */
+body.ux21{background:#090a0e;color:#fffdfd}
+body.ux21 .app{max-width:460px}
+
+/* Header: useful, not dominant. */
+body.ux21 .topbar{padding-top:calc(8px + env(safe-area-inset-top));padding-bottom:8px;border-color:#20232b}
+body.ux21 .brand{gap:9px}
+body.ux21 .brandIcon{width:40px;height:40px;border-radius:13px;font-size:22px}
+body.ux21 .brand h1{font-size:18px;line-height:1.05}
+body.ux21 .brand p{font-size:11px;line-height:1.2}
+body.ux21 .clock b{font-size:17px}
+body.ux21 .clock span{font-size:9px}
+
+/* Status becomes a slim information row instead of another card. */
+body.ux21 .statusStrip{padding:9px 2px 8px;background:transparent;border:0;border-radius:0;gap:10px}
+body.ux21 .statusCopy b{font-size:13px}
+body.ux21 .statusCopy span{font-size:11.5px;color:#bdbac2}
+body.ux21 .dot{width:8px;height:8px;box-shadow:0 0 0 3px rgba(102,223,160,.12)}
+
+/* NOW: one strong decision. */
+body.ux21 .focusCard{margin-top:4px;padding:17px;border-radius:22px;border-color:#2d3039;background:#14161c;box-shadow:0 10px 28px rgba(0,0,0,.22)}
+body.ux21 .focusTop{grid-template-columns:minmax(0,1fr) 58px;gap:8px}
+body.ux21 .eyebrow{font-size:10px;letter-spacing:.08em}
+body.ux21 .focusText h1{font-size:30px;line-height:1.02;margin:6px 0 7px}
+body.ux21 .focusText p{font-size:14px;line-height:1.42;color:#d6d3da}
+body.ux21 .where{margin-top:10px;padding:6px 9px;border:0;background:#20232a;font-size:11px}
+body.ux21 .count b{font-size:24px}
+body.ux21 .count span{font-size:8px;line-height:1.2}
+body.ux21 .progress{margin:11px 0 12px;height:5px;background:#252831}
+
+/* Primary action gets its own row. */
+body.ux21 .actionGrid{grid-template-columns:1fr 1fr;gap:7px}
+body.ux21 .action{min-height:46px;border-radius:14px;font-size:12px}
+body.ux21 .action.primary{grid-column:1/-1;min-height:56px;font-size:13px;font-weight:900;border-radius:16px;box-shadow:0 8px 20px rgba(255,95,127,.16)}
+body.ux21 .action:not(.primary){background:#1b1e25;border-color:#30333d;color:#e6e3e9}
+body.ux21 .action.done{background:#173326;border-color:#28553f;color:#c8f7dc}
+
+/* Utilities are clearly secondary. */
+body.ux21 .quickRow{gap:6px;margin-top:8px}
+body.ux21 .quick{height:50px;border-radius:14px;border:0;background:#121419;font-size:11.5px;color:#e7e4e9}
+body.ux21 .quick span{font-size:17px;margin-right:5px}
+body.ux21 .uxNearShortcut{min-height:44px;margin-top:6px;border-radius:14px;font-size:12px;background:#10232b;border-color:#205064}
+
+/* Section rhythm: use whitespace and separators instead of boxes everywhere. */
+body.ux21 .section{padding-top:17px}
+body.ux21 .sectionHead{margin-bottom:7px}
+body.ux21 .sectionHead h2{font-size:20px}
+body.ux21 .sectionHead span{font-size:10px;color:#a9a6ae}
+body.ux21 .upcoming{gap:0;border-top:1px solid #252831;border-bottom:1px solid #252831}
+body.ux21 .upRow{padding:11px 2px;border:0;border-bottom:1px solid #24272f;border-radius:0;background:transparent;grid-template-columns:50px 1fr 14px}
+body.ux21 .upRow:last-child{border-bottom:0}
+body.ux21 .upRow.now{background:transparent;border-left:3px solid var(--gold);padding-left:9px}
+body.ux21 .upRow b{font-size:13px}
+body.ux21 .upRow span{font-size:11px;color:#bbb8c0}
+body.ux21 .upTime{font-size:11px}
+body.ux21 .uxPlanShortcut{min-height:42px;margin-top:7px;border:0;background:#15171d;color:#e0dde3;font-size:11.5px}
+
+/* Bottom nav: one system, larger labels, no boxed inactive states. */
+body.ux21 .nav{gap:0;padding-top:5px;background:rgba(9,10,14,.99);border-color:#24262e}
+body.ux21 .nav button{min-height:57px;border-radius:12px;font-size:9px;color:#a6a3ab;padding:5px 1px 3px;font-weight:800}
+body.ux21 .nav button span{font-size:18px;margin-bottom:2px}
+body.ux21 .nav button.active{background:#1b1e25;color:#fff}
+
+/* Plan: compact list rather than a deck of cards. */
+body.ux21 .timeline{gap:0;border-top:1px solid #292c34}
+body.ux21 .event{padding:12px 2px;border:0;border-bottom:1px solid #292c34;border-radius:0;background:transparent;grid-template-columns:44px 1fr 34px}
+body.ux21 .event.current{background:transparent;border-left:3px solid var(--gold);padding-left:9px}
+body.ux21 .event h3{font-size:13.5px}
+body.ux21 .event p{font-size:11px;line-height:1.38;color:#c5c2c9}
+body.ux21 .eventTime{font-size:11px}
+body.ux21 .tag{font-size:9px;padding:3px 6px}
+body.ux21 .event .eventDone{border-radius:50%;width:32px;height:32px}
+
+/* Explore header and filters. */
+body.ux21 .exploreHero{padding:14px 2px 10px;border:0;border-radius:0;background:transparent}
+body.ux21 .exploreHero h2{font-size:25px;margin-top:2px}
+body.ux21 .exploreHero p{font-size:12.5px;line-height:1.4;color:#c7c4cb}
+body.ux21 #exploreFilters{top:64px;padding-top:7px;padding-bottom:7px;border-color:#24262e}
+body.ux21 .filterBar{gap:5px}
+body.ux21 .filterBar button{min-height:36px;border-radius:12px;padding:7px 10px;font-size:10.5px;border-color:#30333b;background:#121419}
+body.ux21 .filterBar button.active{background:#f4f3f5;color:#101116;border-color:#f4f3f5}
+body.ux21 #nearMeFilter.active{background:var(--cyan);border-color:var(--cyan)}
+
+/* Spotlight remains special; ordinary Explore results become clean list rows. */
+body.ux21 .spotlight{padding:14px;border-radius:18px;margin-top:7px}
+body.ux21 .spotlight b{font-size:15px}
+body.ux21 .spotlight p{font-size:11.5px}
+body.ux21 .placeGrid{gap:0;border-top:1px solid #292c34}
+body.ux21 .placeCard{grid-template-columns:42px minmax(0,1fr);gap:10px;padding:12px 2px;border:0;border-bottom:1px solid #292c34;border-radius:0;background:transparent}
+body.ux21 .placeIcon{width:42px;height:42px;border-radius:12px;font-size:22px;background:#1b1e25}
+body.ux21 .placeCard h3{font-size:14px;margin:0 0 3px}
+body.ux21 .placeCard p{font-size:11.5px;line-height:1.4;color:#c5c2c9}
+body.ux21 .placeMeta{margin-top:5px;gap:4px}
+body.ux21 .placeMeta span{font-size:9px;padding:3px 6px;background:#1d2027}
+body.ux21 .mapPill{min-height:38px;margin-top:7px;border-radius:11px;font-size:10.5px;padding:0 12px}
+body.ux21 .drinkGPS{display:none!important}
+
+/* Nearby: make ranking easy to scan. */
+body.ux21 .nearHeader h2{font-size:24px}
+body.ux21 .nearHeader .eyebrow{font-size:9px}
+body.ux21 .nearRefresh{min-height:36px;border:0;background:#1b1e25;font-size:10.5px}
+body.ux21 .nearStatus{padding:9px 10px;border-radius:12px;font-size:11.5px}
+body.ux21 .nearResults{gap:0;border-top:1px solid #292c34}
+body.ux21 .nearResult{grid-template-columns:40px minmax(0,1fr);gap:10px;padding:12px 2px;border:0;border-bottom:1px solid #292c34;border-radius:0;background:transparent}
+body.ux21 .nearResult.closest{background:linear-gradient(90deg,rgba(107,217,255,.08),transparent 65%);border-left:3px solid var(--cyan);padding-left:9px}
+body.ux21 .nearResult.live{box-shadow:none}
+body.ux21 .nearResult.live .nearMeta{color:#a9efc8}
+body.ux21 .nearRank{top:9px;right:2px;font-size:8.5px}
+body.ux21 .nearIcon{width:40px;height:40px;border-radius:11px;font-size:21px;background:#1b1e25}
+body.ux21 .nearBody h3{font-size:14.5px;margin-right:52px}
+body.ux21 .nearMeters b{font-size:13.5px}
+body.ux21 .nearMeters span{font-size:10.5px}
+body.ux21 .nearMeta{font-size:10px}
+body.ux21 .nearBody p{font-size:11.5px}
+body.ux21 .nearMapBtn{min-height:38px;font-size:10.5px}
+body.ux21 .nearPrivacy{border:0;padding:8px 2px;font-size:10.5px}
+body.ux21 .nearDistanceBadge{font-size:9px}
+
+/* Sheets: bigger readable choices, less framing. */
+body.ux21 .sheet{padding:13px 15px calc(17px + env(safe-area-inset-bottom));background:#101217}
+body.ux21 .sheet h2{font-size:22px}
+body.ux21 .sheetChoice{padding:13px 2px;border:0;border-bottom:1px solid #2c2f37;border-radius:0;background:transparent;margin:0}
+body.ux21 .sheetChoice b{font-size:13.5px}
+body.ux21 .sheetChoice p{font-size:11.5px;line-height:1.42;color:#c9c6cd}
+
+/* General readability floor. */
+body.ux21 .moreCard p,body.ux21 .card p{font-size:11.5px;line-height:1.45}
+body.ux21 .moreCard h3,body.ux21 .card h3{font-size:13.5px}
+body.ux21 .mission .mc b{font-size:12.5px}
+body.ux21 .mission .mc span{font-size:10.5px}
+body.ux21 .reward p{font-size:10.5px}
+
+@media(max-width:370px){
+  body.ux21 .focusText h1{font-size:28px}
+  body.ux21 .focusText p{font-size:13px}
+  body.ux21 .nav button{font-size:8.5px}
+  body.ux21 .quick{font-size:11px}
+}
