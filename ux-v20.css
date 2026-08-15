@@ -1,0 +1,138 @@
+/* V20 — color + typography cleanup */
+:root{
+  --bg:#090a0e;
+  --panel:#14161c;
+  --panel2:#1b1e26;
+  --line:#363946;
+  --text:#fffdfd;
+  --muted:#cbc8d0;
+  --pink:#ff5f7f;
+  --gold:#ffd166;
+  --green:#66dfa0;
+  --cyan:#6bd9ff;
+  --violet:#b59cff;
+  --orange:#ff9a5f;
+}
+
+/* One color = one meaning: pink action, gold time, green live/done, cyan location, violet Shylene. */
+body.ux20{background:#090a0e;color:#fffdfd;-webkit-font-smoothing:antialiased}
+body.ux20 .topbar{background:rgba(9,10,14,.97);border-color:#252832}
+body.ux20 .brandIcon{background:linear-gradient(145deg,#ff647f,#ff9b68);box-shadow:none}
+body.ux20 .brand h1{color:#fff;font-weight:800}
+body.ux20 .brand p{color:#c9c7ce}
+body.ux20 .clock b{color:#fff;font-weight:800}
+body.ux20 .clock span{color:#bdbac3;letter-spacing:.11em}
+
+/* Status is information, not another hero card. */
+body.ux20 .statusStrip{background:#15171d;border-color:#30333d;box-shadow:none}
+body.ux20 .statusCopy b{color:#fff}
+body.ux20 .statusCopy span{color:#cbc8cf}
+body.ux20 .dot{background:var(--green);box-shadow:0 0 0 4px rgba(102,223,160,.13)}
+
+/* NOW: neutral card with one obvious action. */
+body.ux20 .focusCard{background:linear-gradient(180deg,#191b22,#121319);border-color:#353844;box-shadow:0 14px 34px rgba(0,0,0,.24)}
+body.ux20 .focusText h1{color:#fff;font-weight:800;letter-spacing:-.035em}
+body.ux20 .focusText p{color:#d5d2d9}
+body.ux20 .eyebrow{color:var(--cyan);letter-spacing:.11em;font-size:10px}
+body.ux20 .where{background:#20232b;border-color:#3b3e49;color:#f4f2f6}
+body.ux20 .count b{color:var(--gold)}
+body.ux20 .count span{color:#c0bdc5;letter-spacing:.10em}
+body.ux20 .progress{background:#292c34}
+body.ux20 .progress i{background:var(--gold)}
+body.ux20 .action{background:#20222a;border-color:#3b3e49;color:#f7f5f8}
+body.ux20 .action.primary{background:var(--pink);color:#fff;box-shadow:0 7px 18px rgba(255,95,127,.18)}
+body.ux20 .action.done{background:#173326;border-color:#2e6249;color:#bff5d6}
+
+/* Quick pivots should look like utilities, not four more hero actions. */
+body.ux20 .quick{background:#14161c;border-color:#30333d;color:#f0edf2;font-weight:800}
+body.ux20 .quick:active{background:#1d2027}
+body.ux20 .uxNearShortcut{background:#10232b;border-color:#235366;color:#d8f7ff;box-shadow:none}
+
+/* Clear typography hierarchy. */
+body.ux20 .sectionHead h2{color:#fff;font-weight:800;letter-spacing:-.025em}
+body.ux20 .sectionHead span{text-transform:none;letter-spacing:.025em;color:#aaa8b0;font-size:9px}
+body.ux20 .upRow{background:#13151b;border-color:#30333d}
+body.ux20 .upRow.now{background:#1b1a17;border-color:#66572e}
+body.ux20 .upRow b{color:#f9f7fa}
+body.ux20 .upRow span{color:#c3c0c8}
+body.ux20 .upTime{color:var(--gold)}
+body.ux20 .arrow{color:#8d8993}
+body.ux20 .uxPlanShortcut{background:transparent;border-color:#333641;color:#d5d2d9}
+
+/* Navigation: brighter labels, quieter active background. */
+body.ux20 .nav{background:rgba(9,10,14,.985);border-color:#292b34}
+body.ux20 .nav button{color:#aaa7b0;font-weight:800}
+body.ux20 .nav button.active{background:#20222a;color:#fff}
+
+/* Plan */
+body.ux20 .event{background:#14161c;border-color:#30333d}
+body.ux20 .event.current{background:#1a1916;border-color:#64562e}
+body.ux20 .event h3{color:#fff;font-weight:800}
+body.ux20 .event p{color:#c9c6cd}
+body.ux20 .eventTime{color:var(--gold)}
+body.ux20 .tag{background:#23262e;color:#cbc8d0}
+body.ux20 .tag.shy{background:#2a2240;color:#dfd5ff}
+body.ux20 .tag.ati{background:#152b33;color:#cdf4ff}
+
+/* Explore: reduce gradients and gray-on-gray. */
+body.ux20 .exploreHero{background:#15171d;border-color:#323540}
+body.ux20 .exploreHero:after{display:none}
+body.ux20 .exploreHero h2{color:#fff;font-weight:800}
+body.ux20 .exploreHero p{color:#cbc8cf}
+body.ux20 #exploreFilters{background:rgba(9,10,14,.97);border-color:#292b34}
+body.ux20 .filterBar button{background:#15171d;border-color:#353842;color:#d1ced5;font-weight:800}
+body.ux20 .filterBar button.active{background:#f8f7f9;border-color:#f8f7f9;color:#111217}
+body.ux20 #nearMeFilter.active{background:var(--cyan);border-color:var(--cyan);color:#071116}
+body.ux20 .spotlight{background:#171820;border-color:#373947}
+body.ux20 .spotlight p{color:#cdc9d1}
+body.ux20 .placeCard{background:#14161c;border-color:#30333d}
+body.ux20 .placeIcon{background:#20232b}
+body.ux20 .placeCard h3{color:#fff;font-weight:800}
+body.ux20 .placeCard p{color:#c9c6ce}
+body.ux20 .placeMeta span{background:#23262e;color:#c8c5cc}
+body.ux20 .mapPill{background:#10232b;border-color:#245064;color:#d7f7ff}
+body.ux20 .drinkGPS{color:#b7b4bc!important;opacity:1}
+
+/* Nearby: cyan for location, green only for live. */
+body.ux20 .nearStatus{background:#14161c;border-color:#353843;color:#d4d1d8}
+body.ux20 .nearStatus.good{background:#13261d;border-color:#28583e;color:#bff2d2}
+body.ux20 .nearStatus.warn{background:#282317;border-color:#62552d;color:#f4df9c}
+body.ux20 .nearStatus.loading{background:#10232b;border-color:#235166;color:#d4f6ff}
+body.ux20 .nearResult{background:#14161c;border-color:#343741}
+body.ux20 .nearResult.closest{background:#112028;border-color:#28647b}
+body.ux20 .nearResult.live{box-shadow:inset 3px 0 0 var(--green)}
+body.ux20 .nearRank{color:#a9a6af}
+body.ux20 .nearResult.closest .nearRank{color:var(--cyan)}
+body.ux20 .nearIcon{background:#20232b}
+body.ux20 .nearBody h3{color:#fff;font-weight:800}
+body.ux20 .nearMeters b{color:var(--cyan)}
+body.ux20 .nearMeters span{color:#c6c3ca}
+body.ux20 .nearMeta{color:#a9efc8}
+body.ux20 .nearBody p{color:#cac7ce}
+body.ux20 .nearMapBtn{background:#10232b;border-color:#245064;color:#d7f7ff}
+body.ux20 .nearPrivacy{background:transparent;border-color:#30333b;color:#aaa7af}
+body.ux20 .nearDistanceBadge{background:#10232b;border-color:#214858;color:#cef4ff}
+
+/* Sheets: less purple-gray, easier to scan outdoors. */
+body.ux20 .sheet{background:#111319;border-color:#343741}
+body.ux20 .sheet h2{color:#fff;font-weight:800;letter-spacing:-.02em}
+body.ux20 .sheetChoice{background:#1a1c23;border-color:#353843}
+body.ux20 .sheetChoice b{color:#fff}
+body.ux20 .sheetChoice p{color:#cecbd2}
+body.ux20 .grab{background:#555963}
+
+/* Shylene keeps a distinct violet accent. */
+body.ux20 .scoreCard{background:#1b1725;border-color:#4a3e64}
+body.ux20 .ring{background:conic-gradient(var(--violet) 0deg,#2a2c34 0deg)}
+body.ux20 .mission{background:#14161c;border-color:#30333d}
+body.ux20 .mission button.done{background:var(--violet)}
+
+/* Helper copy */
+body.ux20 .moreCard,body.ux20 .card{background:#14161c;border-color:#30333d}
+body.ux20 .moreCard h3,body.ux20 .card h3{color:#fff}
+body.ux20 .moreCard p,body.ux20 .card p{color:#c9c6cd}
+
+@media(max-width:370px){
+  body.ux20 .brand h1{font-size:18px}
+  body.ux20 .focusText h1{font-size:28px}
+}
