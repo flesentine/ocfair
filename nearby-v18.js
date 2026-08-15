@@ -26,8 +26,7 @@
     const dLon = toRad(b.lon - a.lon);
     const lat1 = toRad(a.lat);
     const lat2 = toRad(b.lat);
-    const h = Math.sin(dLat / 2) ** 2 +
-      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
     return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
   }
 
@@ -41,7 +40,7 @@
   function walkText(mi) {
     const ft = mi * 5280;
     if (ft < 90) return '<1 min';
-    return `~${Math.max(1, Math.round(ft / WALK_FT_PER_MIN))} min`;
+    return `${Math.max(1, Math.round(ft / WALK_FT_PER_MIN))} min`;
   }
 
   function cleanTitle(card) {
@@ -114,14 +113,14 @@
     nearSection.innerHTML = `
       <div class="nearHeader">
         <div>
-          <div class="eyebrow">GPS · on this phone only</div>
-          <h2>Near you</h2>
+          <div class="eyebrow">GPS · private on this phone</div>
+          <h2>Closest right now</h2>
         </div>
         <button class="nearRefresh" type="button">↻ Refresh</button>
       </div>
-      <div class="nearStatus" id="nearStatus">Tap Near Me to find what is closest.</div>
+      <div class="nearStatus" id="nearStatus">Tap Near Me to rank nearby stops.</div>
       <div class="nearResults" id="nearResults"></div>
-      <div class="nearPrivacy">📍 Your location stays in this browser. Distances are straight-line GPS estimates, so actual walking paths can be a little longer.</div>
+      <div class="nearPrivacy">📍 Straight-line GPS estimate. Fair walkways can make the real walk a little longer.</div>
     `;
     tonight.before(nearSection);
     $('.nearRefresh', nearSection).onclick = () => requestLocation(true);
@@ -139,17 +138,10 @@
     nearButton.textContent = '📍 Near Me';
 
     const best = $('button[data-filter="best"]', bar);
-    if (best) best.after(nearButton);
+    if (best) best.before(nearButton);
     else bar.prepend(nearButton);
 
-    nearButton.onclick = () => {
-      $$('#exploreFilters button').forEach(b => b.classList.toggle('active', b === nearButton));
-      nearActive = true;
-      ensureSection()?.classList.remove('hide');
-      requestLocation(false);
-      setTimeout(() => ensureSection()?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
-      startRefreshLoop();
-    };
+    nearButton.onclick = activateNearMe;
 
     $$('#exploreFilters button').forEach(b => {
       if (b === nearButton) return;
@@ -162,6 +154,15 @@
     });
 
     return nearButton;
+  }
+
+  function activateNearMe() {
+    $$('#exploreFilters button').forEach(b => b.classList.toggle('active', b === nearButton));
+    nearActive = true;
+    ensureSection()?.classList.remove('hide');
+    requestLocation(false);
+    setTimeout(() => ensureSection()?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    startRefreshLoop();
   }
 
   function setStatus(message, state = '') {
@@ -202,20 +203,25 @@
     const accuracyFeet = Math.round((accuracyMeters || 0) * 3.28084 / 10) * 10;
 
     if (fromFair > 1.2) {
-      setStatus(`You’re about ${fromFair.toFixed(1)} mi from the fair. Near Me will become useful once you’re on the property.`, 'warn');
+      setStatus(`You’re about ${fromFair.toFixed(1)} mi from the fair. Near Me will rank internal stops once you arrive.`, 'warn');
       results.innerHTML = '';
       return;
     }
 
-    setStatus(`GPS ready${accuracyFeet ? ` · accuracy about ±${accuracyFeet} ft` : ''}`, 'good');
+    if (accuracyFeet > 180) setStatus(`Location found · GPS is only accurate to about ±${accuracyFeet} ft`, 'warn');
+    else setStatus(`Location on${accuracyFeet ? ` · about ±${accuracyFeet} ft accuracy` : ''}`, 'good');
 
     const ranked = collectCandidates()
       .map(x => ({ ...x, distance: haversineMiles(position, x.coords) }))
-      .sort((a, b) => a.distance - b.distance || Number(b.live) - Number(a.live))
-      .slice(0, 7);
+      .sort((a, b) => {
+        const liveBoostA = a.live ? 0.015 : 0;
+        const liveBoostB = b.live ? 0.015 : 0;
+        return (a.distance - liveBoostA) - (b.distance - liveBoostB);
+      })
+      .slice(0, 5);
 
     if (!ranked.length) {
-      results.innerHTML = `<div class="nearEmpty">I couldn’t find any mapped fair stops yet.</div>`;
+      results.innerHTML = `<div class="nearEmpty">No mapped stops available right now.</div>`;
       return;
     }
 
@@ -223,16 +229,16 @@
     ranked.forEach((x, i) => {
       const row = document.createElement('article');
       row.className = `nearResult${i === 0 ? ' closest' : ''}${x.live ? ' live' : ''}`;
-      const label = x.live ? 'LIVE · ' + x.meta : x.meta;
+      const label = x.live ? `LIVE · ${x.meta}` : x.meta;
       row.innerHTML = `
         <div class="nearRank">${i === 0 ? 'NEAREST' : `#${i + 1}`}</div>
         <div class="nearIcon">${x.icon}</div>
         <div class="nearBody">
           <h3>${x.title}</h3>
-          <div class="nearMeters"><b>${distanceText(x.distance)}</b><span>${walkText(x.distance)} rough walk</span></div>
+          <div class="nearMeters"><b>${distanceText(x.distance)}</b><span>${walkText(x.distance)} walk</span></div>
           ${label ? `<div class="nearMeta">${label}</div>` : ''}
           ${x.subtitle ? `<p>${x.subtitle}</p>` : ''}
-          <button class="nearMapBtn" type="button"> Maps · exact pin</button>
+          <button class="nearMapBtn" type="button">Directions ↗</button>
         </div>
       `;
       $('.nearMapBtn', row).onclick = () => {
@@ -245,13 +251,9 @@
   function locationError(err) {
     requesting = false;
     const code = err && err.code;
-    if (code === 1) {
-      setStatus('Location permission is off for this site. Allow location for Fair Night, then tap Refresh.', 'warn');
-    } else if (code === 2) {
-      setStatus('GPS could not get a reliable position. Move into a more open area and try again.', 'warn');
-    } else {
-      setStatus('GPS timed out. Tap Refresh and try again.', 'warn');
-    }
+    if (code === 1) setStatus('Location is off for this site. Allow location for Fair Night, then tap Refresh.', 'warn');
+    else if (code === 2) setStatus('GPS could not get a reliable position. Move into a more open area and try again.', 'warn');
+    else setStatus('GPS timed out. Tap Refresh and try again.', 'warn');
   }
 
   function requestLocation(force) {
@@ -263,7 +265,7 @@
     if (requesting) return;
 
     requesting = true;
-    setStatus(force ? 'Refreshing your GPS position…' : 'Finding you inside the fair…', 'loading');
+    setStatus(force ? 'Refreshing location…' : 'Finding you inside the fair…', 'loading');
 
     navigator.geolocation.getCurrentPosition(
       pos => {
@@ -272,11 +274,7 @@
         renderNearest(point, pos.coords.accuracy);
       },
       locationError,
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: force ? 0 : 15000
-      }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: force ? 0 : 15000 }
     );
   }
 
@@ -284,8 +282,7 @@
     stopRefreshLoop();
     refreshTimer = setInterval(() => {
       if (!nearActive || document.hidden) return;
-      const exploreVisible = $('#view-explore')?.classList.contains('active');
-      if (exploreVisible) requestLocation(false);
+      if ($('#view-explore')?.classList.contains('active')) requestLocation(false);
     }, REFRESH_MS);
   }
 
@@ -294,12 +291,82 @@
     refreshTimer = null;
   }
 
+  function goNearMe() {
+    if (typeof switchView === 'function') switchView('explore');
+    setTimeout(() => {
+      ensureButton();
+      activateNearMe();
+    }, 80);
+  }
+
+  function cleanUX() {
+    document.body.classList.add('ux19');
+
+    // Replace repeated technical map wording with a simple user action.
+    $$('.mapPill').forEach(btn => { btn.textContent = 'Directions ↗'; });
+
+    // Add one obvious proximity shortcut to NOW instead of making people hunt in Explore.
+    const quickRow = $('#view-now .quickRow');
+    if (quickRow && !$('#uxNearShortcut')) {
+      const btn = document.createElement('button');
+      btn.id = 'uxNearShortcut';
+      btn.className = 'uxNearShortcut';
+      btn.type = 'button';
+      btn.textContent = '📍 What’s near me right now?';
+      btn.onclick = goNearMe;
+      quickRow.insertAdjacentElement('afterend', btn);
+    }
+
+    // Make Coming Up deliberately short and provide one path to the full schedule.
+    const upcoming = $('#upcoming');
+    if (upcoming) {
+      [...upcoming.children].slice(2).forEach(x => x.style.display = 'none');
+      const section = upcoming.closest('.section');
+      if (section && !$('.uxPlanShortcut', section)) {
+        const btn = document.createElement('button');
+        btn.className = 'uxPlanShortcut';
+        btn.type = 'button';
+        btn.textContent = 'View full plan →';
+        btn.onclick = () => typeof switchView === 'function' && switchView('plan');
+        upcoming.insertAdjacentElement('afterend', btn);
+      }
+    }
+
+    // Put the filters people use while walking first.
+    const filters = $('#exploreFilters');
+    if (filters) {
+      const order = ['near', 'best', 'tonight', 'shylene', 'beer', 'easy', 'all'];
+      order.forEach(key => {
+        const el = $(`button[data-filter="${key}"]`, filters);
+        if (el) filters.appendChild(el);
+      });
+      const shy = $('button[data-filter="shylene"]', filters);
+      if (shy) shy.textContent = '★ Shylene';
+      const beer = $('button[data-filter="beer"]', filters);
+      if (beer) beer.textContent = '🍺 Drinks';
+      const tonight = $('button[data-filter="tonight"]', filters);
+      if (tonight) tonight.textContent = '🌙 Tonight';
+    }
+  }
+
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && nearActive) requestLocation(false);
   });
 
   ensureSection();
   ensureButton();
+  cleanUX();
 
-  if (lastPosition) updateDistanceBadges(lastPosition);
+  // The main app re-renders some DOM pieces. Re-apply lightweight cleanup after those renders.
+  const observer = new MutationObserver(() => {
+    clearTimeout(observer._t);
+    observer._t = setTimeout(() => {
+      $$('.mapPill').forEach(btn => { if (btn.textContent.includes('Maps')) btn.textContent = 'Directions ↗'; });
+      const upcoming = $('#upcoming');
+      if (upcoming) [...upcoming.children].slice(2).forEach(x => x.style.display = 'none');
+      if (lastPosition) updateDistanceBadges(lastPosition);
+    }, 30);
+  });
+  const app = $('.app');
+  if (app) observer.observe(app, { childList: true, subtree: true });
 })();
