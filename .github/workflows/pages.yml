@@ -1,4 +1,4 @@
-name: Apply OC Fair readability pass
+name: Apply exact OC Fair map pins
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  readability:
+  exact-pins:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,26 +19,83 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Add high-contrast outdoor CSS
+      - name: Patch Apple Maps to literal dropped pins
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import base64
+          import re
+
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-          if '<style id="readability-v15">' in s:
-              print('Readability pass already present')
-              raise SystemExit(0)
-          b64='PHN0eWxlIGlkPSJyZWFkYWJpbGl0eS12MTUiPgo6cm9vdHstLWJnOiMwODA4MGQ7LS1wYW5lbDojMWIxYjI0Oy0tcGFuZWwyOiMyNTI0MmY7LS1saW5lOiM0NTQzNGY7LS10ZXh0OiNmZmY7LS1tdXRlZDojZDJjZGQ3fQpib2R5e2ZvbnQtc2l6ZToxNnB4Oy13ZWJraXQtZm9udC1zbW9vdGhpbmc6YW50aWFsaWFzZWQ7dGV4dC1yZW5kZXJpbmc6b3B0aW1pemVMZWdpYmlsaXR5fQoudG9wYmFye2JhY2tncm91bmQ6cmdiYSg4LDgsMTMsLjk3KTtib3JkZXItYm90dG9tLWNvbG9yOiMzMzMxM2I7cGFkZGluZy1sZWZ0OjE4cHg7cGFkZGluZy1yaWdodDoxOHB4fQouYnJhbmR7Z2FwOjEycHh9LmJyYW5kSWNvbnt3aWR0aDo0NnB4O2hlaWdodDo0NnB4O2ZvbnQtc2l6ZToyNnB4fS5icmFuZCBoMXtmb250LXNpemU6MjFweDtsaW5lLWhlaWdodDoxLjE1fS5icmFuZCBwe2ZvbnQtc2l6ZToxNHB4O2NvbG9yOiNkMWNjZDY7bWFyZ2luLXRvcDo0cHh9LmNsb2NrIGJ7Zm9udC1zaXplOjIwcHh9LmNsb2NrIHNwYW57Zm9udC1zaXplOjExcHg7bGV0dGVyLXNwYWNpbmc6LjEwZW07Y29sb3I6I2M3YzFjYzttYXJnaW4tdG9wOjNweH0KLnBhZHtwYWRkaW5nOjE2cHggMTZweCAwfS5zZWN0aW9ue3BhZGRpbmc6MjJweCAxNnB4IDB9LnN0YXR1c1N0cmlwe3BhZGRpbmc6MTVweCAxNnB4O2JvcmRlci1jb2xvcjpyZ2JhKDI1NSwyMDksOTMsLjQyKTtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxMjBkZWcscmdiYSgyNTUsMjA5LDkzLC4xNykscmdiYSgyNTUsNzksMTM0LC4xMCkpfS5zdGF0dXNDb3B5e2Rpc3BsYXk6YmxvY2s7bGluZS1oZWlnaHQ6MS4zNX0uc3RhdHVzQ29weSBie2Rpc3BsYXk6YmxvY2s7Zm9udC1zaXplOjE2cHg7bWFyZ2luLWJvdHRvbTo0cHh9LnN0YXR1c0NvcHkgc3BhbntkaXNwbGF5OmJsb2NrO2ZvbnQtc2l6ZToxNHB4O2NvbG9yOiNlZWU5ZWY7bGluZS1oZWlnaHQ6MS40NX0uZG90e3dpZHRoOjEycHg7aGVpZ2h0OjEycHg7ZmxleDowIDAgYXV0b30KLmZvY3VzQ2FyZHtwYWRkaW5nOjIycHg7Ym9yZGVyLWNvbG9yOiM0OTQ2NTM7YmFja2dyb3VuZDpyYWRpYWwtZ3JhZGllbnQoY2lyY2xlIGF0IDEwMCUgMCxyZ2JhKDI1NSw3OSwxMzQsLjIwKSx0cmFuc3BhcmVudCAzNCUpLGxpbmVhci1ncmFkaWVudCgxNjBkZWcsIzIwMjAyYSwjMTUxNTFjKX0uZXllYnJvd3tmb250LXNpemU6MTJweDtsZXR0ZXItc3BhY2luZzouMTJlbX0uZm9jdXNUZXh0IGgxe2ZvbnQtc2l6ZTozOHB4O2xpbmUtaGVpZ2h0OjEuMDI7bWFyZ2luOjEwcHggMCAxMnB4fS5mb2N1c1RleHQgcHtmb250LXNpemU6MTdweDtsaW5lLWhlaWdodDoxLjU7Y29sb3I6I2UxZGNlNX0ud2hlcmV7Zm9udC1zaXplOjEzcHg7cGFkZGluZzo5cHggMTJweDtjb2xvcjojZmZmO2JvcmRlci1jb2xvcjojNTE0ZTVjO2JhY2tncm91bmQ6IzJjMmEzNn0uY291bnQgYntmb250LXNpemU6MzJweH0uY291bnQgc3Bhbntmb250LXNpemU6MTAuNXB4O2xpbmUtaGVpZ2h0OjEuNDU7bGV0dGVyLXNwYWNpbmc6LjEwZW07Y29sb3I6I2QwY2FkNH0ucHJvZ3Jlc3N7aGVpZ2h0OjhweDtiYWNrZ3JvdW5kOiMzYTM4NDQ7bWFyZ2luOjE4cHggMH0KLnByZXBJdGVte2ZvbnQtc2l6ZToxM3B4O2xpbmUtaGVpZ2h0OjEuMzU7cGFkZGluZzoxMXB4IDEycHg7YmFja2dyb3VuZDojMjUyNDJmO2JvcmRlci1jb2xvcjojNDAzZTQ5fS5hY3Rpb25Hcmlke2dhcDo5cHh9LmFjdGlvbnttaW4taGVpZ2h0OjU4cHg7Zm9udC1zaXplOjE0cHg7bGluZS1oZWlnaHQ6MS4yO2JvcmRlci1jb2xvcjojNTA0ZDU5O2JhY2tncm91bmQ6IzJhMjkzNH0uYWN0aW9uLmRvbmV7Y29sb3I6I2M1ZjhkYztib3JkZXItY29sb3I6IzQyNjQ1NDtiYWNrZ3JvdW5kOiMxYzM1MmJ9LnF1aWNrUm93e2dhcDoxMHB4O21hcmdpbi10b3A6MTNweH0ucXVpY2t7aGVpZ2h0OjgycHg7Zm9udC1zaXplOjE1cHg7Ym9yZGVyLWNvbG9yOiM0NTQyNGQ7YmFja2dyb3VuZDojMTkxOTIyfS5xdWljayBzcGFue2ZvbnQtc2l6ZToyNXB4O21hcmdpbi1ib3R0b206N3B4fQouc2VjdGlvbkhlYWR7bWFyZ2luLWJvdHRvbToxM3B4fS5zZWN0aW9uSGVhZCBoMntmb250LXNpemU6MjdweH0uc2VjdGlvbkhlYWQgc3Bhbntmb250LXNpemU6MTFweDtsZXR0ZXItc3BhY2luZzouMTBlbTtjb2xvcjojYzRiZWM5fS51cGNvbWluZ3tnYXA6OXB4fS51cFJvd3tncmlkLXRlbXBsYXRlLWNvbHVtbnM6NjJweCAxZnIgMjBweDtnYXA6MTBweDtwYWRkaW5nOjE1cHg7Ym9yZGVyLWNvbG9yOiM0MDNlNDk7YmFja2dyb3VuZDojMWExYTIyfS51cFJvdy5ub3d7Ym9yZGVyLWNvbG9yOnJnYmEoMjU1LDIwOSw5MywuNTIpfS51cFRpbWV7Zm9udC1zaXplOjE0cHh9LnVwUm93IGJ7Zm9udC1zaXplOjE2cHg7bGluZS1oZWlnaHQ6MS4yNX0udXBSb3cgc3Bhbntmb250LXNpemU6MTNweDtsaW5lLWhlaWdodDoxLjM1O2NvbG9yOiNjOWMzY2U7bWFyZ2luLXRvcDo0cHh9LmFycm93e2NvbG9yOiNhYWE0YWZ9Ci50aW1lbGluZXtnYXA6MTBweH0uZXZlbnR7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOjUycHggMWZyIDM4cHg7Z2FwOjEwcHg7cGFkZGluZzoxNHB4O2JvcmRlci1jb2xvcjojNDAzZTQ5O2JhY2tncm91bmQ6IzFiMWIyNH0uZXZlbnRUaW1le2ZvbnQtc2l6ZToxM3B4fS5ldmVudCBoM3tmb250LXNpemU6MTZweH0uZXZlbnQgcHtmb250LXNpemU6MTNweDtsaW5lLWhlaWdodDoxLjQ1O2NvbG9yOiNjZWM4ZDI7bWFyZ2luLXRvcDo1cHh9LnRhZ3tmb250LXNpemU6MTAuNXB4O3BhZGRpbmc6NXB4IDhweDtjb2xvcjojZTBkYWU0O2JhY2tncm91bmQ6IzMwMmYzYn0uZXZlbnQgLm1hcFBpbGx7Zm9udC1zaXplOjExLjVweDttaW4taGVpZ2h0OjM2cHh9LmV2ZW50IC5ldmVudERvbmV7d2lkdGg6MzZweDtoZWlnaHQ6MzZweH0ucGFjZSBidXR0b257Zm9udC1zaXplOjEycHg7cGFkZGluZzoxMXB4IDVweDtjb2xvcjojYzhjMmNjfQoubWlzc2lvbntncmlkLXRlbXBsYXRlLWNvbHVtbnM6NDJweCAxZnIgMzhweDtnYXA6MTBweDtwYWRkaW5nOjE0cHg7Ym9yZGVyLWNvbG9yOiM0MDNlNDk7YmFja2dyb3VuZDojMWIxYjI0fS5taXtmb250LXNpemU6MjVweH0ubWMgYntmb250LXNpemU6MTVweH0ubWMgc3Bhbntmb250LXNpemU6MTIuNXB4O2xpbmUtaGVpZ2h0OjEuNDtjb2xvcjojYzljM2NlO21hcmdpbi10b3A6NHB4fS5taXNzaW9uIGJ1dHRvbnt3aWR0aDozNnB4O2hlaWdodDozNnB4fS5yZXdhcmQgaDN7Zm9udC1zaXplOjE3cHh9LnJld2FyZCBwe2ZvbnQtc2l6ZToxM3B4O2xpbmUtaGVpZ2h0OjEuNDU7Y29sb3I6I2NiYzVjZn0KLm1vcmVDYXJkLC5jYXJke3BhZGRpbmc6MTdweDtib3JkZXItY29sb3I6IzQwM2U0OTtiYWNrZ3JvdW5kOiMxYjFiMjR9Lm1vcmVDYXJkIGgzLC5jYXJkIGgze2ZvbnQtc2l6ZToxNnB4O21hcmdpbi1ib3R0b206OHB4fS5tb3JlQ2FyZCBwLC5jYXJkIHB7Zm9udC1zaXplOjEzLjVweDtsaW5lLWhlaWdodDoxLjU7Y29sb3I6I2QwY2FkNH0uc2FmZXtjb2xvcjojYjlmNWQ0IWltcG9ydGFudH0ud2Fybntjb2xvcjojZmZlM2E5IWltcG9ydGFudH0ubGlua1JvdyBhLC5taW5pQnRue21pbi1oZWlnaHQ6NDZweDtmb250LXNpemU6MTJweDtib3JkZXItY29sb3I6IzQ5NDY1MTtiYWNrZ3JvdW5kOiMyOTI4MzJ9Ci5leHBsb3JlSGVyb3twYWRkaW5nOjIwcHg7Ym9yZGVyLWNvbG9yOiM0NjQzNGZ9LmV4cGxvcmVIZXJvIGgye2ZvbnQtc2l6ZTozMHB4fS5leHBsb3JlSGVybyBwe2ZvbnQtc2l6ZToxNC41cHg7bGluZS1oZWlnaHQ6MS41O2NvbG9yOiNkMGNhZDR9LmZpbHRlckJhciBidXR0b257Zm9udC1zaXplOjEycHg7cGFkZGluZzoxMHB4IDE0cHg7Y29sb3I6I2QwY2FkNH0uc3BvdGxpZ2h0IGJ7Zm9udC1zaXplOjE3cHh9LnNwb3RsaWdodCBwe2ZvbnQtc2l6ZToxMy41cHg7bGluZS1oZWlnaHQ6MS41O2NvbG9yOiNkZGQ2ZTB9LnNwb3RUYWdzIHNwYW57Zm9udC1zaXplOjEwLjVweDtwYWRkaW5nOjVweCA4cHh9Ci5wbGFjZUNhcmR7Z3JpZC10ZW1wbGF0ZS1jb2x1bW5zOjUycHggMWZyIDIwcHg7Z2FwOjEycHg7cGFkZGluZzoxNXB4O2JvcmRlci1jb2xvcjojNDAzZTQ5O2JhY2tncm91bmQ6IzFiMWIyNH0ucGxhY2VJY29ue3dpZHRoOjUycHg7aGVpZ2h0OjUycHg7Zm9udC1zaXplOjI3cHh9LnBsYWNlQ2FyZCBoM3tmb250LXNpemU6MTUuNXB4O21hcmdpbi1ib3R0b206NXB4fS5wbGFjZUNhcmQgcHtmb250LXNpemU6MTNweDtsaW5lLWhlaWdodDoxLjQ1O2NvbG9yOiNjZWM4ZDJ9LnBsYWNlTWV0YSBzcGFue2ZvbnQtc2l6ZToxMC41cHg7cGFkZGluZzo1cHggN3B4fS5tYXBQaWxse2ZvbnQtc2l6ZToxMS41cHg7bWluLWhlaWdodDozOHB4O2NvbG9yOiNkNGY2ZmY7Ym9yZGVyLWNvbG9yOnJnYmEoMTA1LDIyNCwyNTUsLjMyKX0KLnNoZWV0e2JhY2tncm91bmQ6IzIwMjAyOTtib3JkZXItY29sb3I6IzQ4NDU1MX0uc2hlZXQgaDJ7Zm9udC1zaXplOjIzcHh9LnNoZWV0Q2hvaWNle3BhZGRpbmc6MTRweDtiYWNrZ3JvdW5kOiMyYTI5MzR9LnNoZWV0Q2hvaWNlIGJ7Zm9udC1zaXplOjE1cHh9LnNoZWV0Q2hvaWNlIHB7Zm9udC1zaXplOjEzcHg7bGluZS1oZWlnaHQ6MS40NTtjb2xvcjojZDBjYWQ0fS50b2FzdHtmb250LXNpemU6MTJweH0KLm5hdntiYWNrZ3JvdW5kOnJnYmEoOSw5LDE0LC45OCk7Ym9yZGVyLXRvcC1jb2xvcjojMzQzMTNjfS5uYXYgYnV0dG9ue2NvbG9yOiNhYWE0YjA7Zm9udC1zaXplOjkuNXB4O2xpbmUtaGVpZ2h0OjEuMTtwYWRkaW5nOjhweCAycHggNnB4fS5uYXYgYnV0dG9uIHNwYW57Zm9udC1zaXplOjIxcHh9Lm5hdiBidXR0b24uYWN0aXZle2JhY2tncm91bmQ6IzI1MjQyZjtjb2xvcjojZmZmfQpAbWVkaWEobWF4LXdpZHRoOjM3MHB4KXsuZm9jdXNUZXh0IGgxe2ZvbnQtc2l6ZTozNHB4fS5mb2N1c1RleHQgcHtmb250LXNpemU6MTZweH0ubmF2IGJ1dHRvbntmb250LXNpemU6OC41cHh9fQo8L3N0eWxlPg=='
-          css=base64.b64decode(b64).decode('utf-8')
-          s=s.replace('</head>',css+'\n</head>',1)
-          s=s.replace('Manual Arrival V14','Outdoor Readability V15')
+
+          old="""function appleMapsURL(destination){const raw=String(destination||'').trim();const match=raw.match(/^(-?\\d+(?:\\.\\d+)?),\\s*(-?\\d+(?:\\.\\d+)?)$/);if(match){const lat=match[1],lon=match[2];return`https://maps.apple.com/?daddr=${lat},${lon}&dirflg=w&t=m`}return'https://maps.apple.com/?daddr='+encodeURIComponent(raw)+'&dirflg=w&t=m'}function openAppleMaps(destination){if(!destination){toast('No GPS pin for this stop');return}window.location.href=appleMapsURL(destination)}"""
+          new="""function appleMapsURL(destination,name){const raw=String(destination||'').trim();const label=String(name||'OC Fair stop').trim();const match=raw.match(/^(-?\\d+(?:\\.\\d+)?),\\s*(-?\\d+(?:\\.\\d+)?)$/);if(match){const lat=match[1],lon=match[2];return`https://maps.apple.com/place?coordinate=${lat},${lon}&name=${encodeURIComponent(label)}&map=hybrid`}return'https://maps.apple.com/search?query='+encodeURIComponent(raw)}function openAppleMaps(destination,name){if(!destination){toast('No GPS pin for this stop');return}window.location.href=appleMapsURL(destination,name)}"""
+          if old not in s:
+              raise SystemExit('Apple Maps function anchor not found')
+          s=s.replace(old,new,1)
+
+          # Live itinerary buttons: pass a human label with the literal coordinate.
+          s=s.replace("openAppleMaps(e.map||e.loc)","openAppleMaps(e.map||e.loc,e.loc)")
+
+          # Explore cards: use each card title as the pin name.
+          s=s.replace("openAppleMaps(c.dataset.map)","openAppleMaps(c.dataset.map,c.querySelector('h3')?.textContent.replace('BEST FIT','').trim()||'OC Fair stop')")
+
+          # Quick-action sheet: every temporary fair stand gets an explicit named coordinate pin.
+          replacements={
+            "openAppleMaps('33.66617,-117.90208')":"openAppleMaps('33.66617,-117.90208','Craft Brew East')",
+            "openAppleMaps('33.66700,-117.90084')":"openAppleMaps('33.66700,-117.90084','Beers of the World')",
+            "openAppleMaps('33.66636,-117.90108')":"openAppleMaps('33.66636,-117.90108','La Cantina')",
+            "openAppleMaps('33.66599,-117.90253')":"openAppleMaps('33.66599,-117.90253','Centennial Farm')",
+            "openAppleMaps('33.66630,-117.89830')":"openAppleMaps('33.66630,-117.89830','Main Carnival')",
+          }
+          for a,b in replacements.items(): s=s.replace(a,b)
+
+          # Expose the literal coordinates so there is no ambiguity about the target.
+          drink_coords={
+            'Craft Brew East':'33.66617, -117.90208',
+            'Beers of the World':'33.66700, -117.90084',
+            'La Cantina':'33.66636, -117.90108',
+            'Hangar Bar':'33.66776, -117.90091',
+            'Main Mall Margaritas / Micheladas':'33.66700, -117.90084',
+          }
+          for title,coord in drink_coords.items():
+              pat=rf'(<h3>{re.escape(title)}(?: <span class="bestBadge">BEST FIT</span>)?</h3><p>.*?</p><div class="placeMeta">.*?</div>)'
+              def add(m,coord=coord):
+                  block=m.group(1)
+                  if 'coordText' in block: return block
+                  return block+f'<div class="coordText">📍 {coord}</div>'
+              s,n=re.subn(pat,add,s,count=1)
+              if n!=1:
+                  raise SystemExit(f'Could not annotate coordinate for {title}')
+
+          # Make the coordinate readout legible and update wording/buttons.
+          if '.coordText{' not in s:
+              css='''<style id="exact-pin-v16">.coordText{margin-top:7px;font-size:11px;line-height:1.35;color:#ffd15d;font-weight:800;letter-spacing:.01em}.mapPill{min-width:116px}</style>'''
+              s=s.replace('</head>',css+'\n</head>',1)
+          s=s.replace(' Maps · GPS pin',' Maps · exact pin')
+          s=s.replace(' Maps · GPS',' Maps · exact pin')
+          s=s.replace('Apple Maps now gets coordinates','Apple Maps now opens literal dropped pins')
+          s=s.replace('The map buttons send latitude/longitude directly instead of asking Apple to search the venue name. Permanent buildings use mapped centers; temporary Fair zones and stands use a pin placed in their Fair-map zone.','The map buttons now open a named Apple Maps place card at the literal latitude/longitude. This avoids Apple Maps snapping an internal fair destination back to the generic OC Fair venue.')
+          s=s.replace('No more collapsing every destination to 88 Fair Drive.','Each button opens a distinct dropped pin inside the fairgrounds.')
+          s=s.replace('Outdoor Readability V15','Exact Pins V16')
+
+          # Security / integrity checks.
+          if '28799441' in s or '465873631' in s:
+              raise SystemExit('Private Etix credentials detected')
+          if 'maps.apple.com/?daddr=' in s:
+              raise SystemExit('Old snapping directions URL still present')
+          if 'maps.apple.com/place?coordinate=' not in s:
+              raise SystemExit('Exact place URL missing')
+          if '</html>' not in s[-500:]:
+              raise SystemExit('HTML incomplete')
+
           p.write_text(s,encoding='utf-8')
+          print('Exact dropped-pin map patch applied')
           PY
 
-      - name: Commit readable app
+      - name: Commit exact-pin app
         shell: bash
         run: |
           set -euo pipefail
@@ -49,5 +106,5 @@ jobs:
             echo 'No changes needed.'
             exit 0
           fi
-          git commit -m 'Improve outdoor readability and contrast'
+          git commit -m 'Make Apple Maps open exact internal fair pins'
           git push origin HEAD:main
