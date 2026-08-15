@@ -1,45 +1,33 @@
-name: Apply OC Fair Explore UX V17
+name: Validate OC Fair app
 
 on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/pages.yml
-      - .github/scripts/apply_v17.py
+      - index.html
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  patch:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Apply patch
-        run: python3 .github/scripts/apply_v17.py
-      - name: Check JavaScript
+      - name: Check JavaScript syntax
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import re
           s = Path('index.html').read_text(encoding='utf-8')
+          if '28799441' in s or '465873631' in s:
+              raise SystemExit('Private Etix credentials detected')
+          if '</html>' not in s[-500:]:
+              raise SystemExit('HTML incomplete')
           blocks = re.findall(r'<script(?: [^>]*)?>(.*?)</script>', s, re.S)
           Path('/tmp/ocfair.js').write_text(max(blocks, key=len), encoding='utf-8')
           PY
           node --check /tmp/ocfair.js
-      - name: Commit app
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html
-          if git diff --cached --quiet; then
-            echo 'No app changes needed.'
-            exit 0
-          fi
-          git commit -m 'Add live tonight explorer and clean up Explore UX'
-          git push origin HEAD:main
