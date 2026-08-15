@@ -238,7 +238,7 @@
           <div class="nearMeters"><b>${distanceText(x.distance)}</b><span>${walkText(x.distance)} walk</span></div>
           ${label ? `<div class="nearMeta">${label}</div>` : ''}
           ${x.subtitle ? `<p>${x.subtitle}</p>` : ''}
-          <button class="nearMapBtn" type="button">Directions ↗</button>
+          <button class="nearMapBtn" type="button">Open Maps</button>
         </div>
       `;
       $('.nearMapBtn', row).onclick = () => {
@@ -303,7 +303,7 @@
     document.body.classList.add('ux19');
 
     // Replace repeated technical map wording with a simple user action.
-    $$('.mapPill').forEach(btn => { btn.textContent = 'Directions ↗'; });
+    $$('.mapPill').forEach(btn => { btn.textContent = 'Open Maps'; });
 
     // Add one obvious proximity shortcut to NOW instead of making people hunt in Explore.
     const quickRow = $('#view-now .quickRow');
@@ -361,7 +361,7 @@
   const observer = new MutationObserver(() => {
     clearTimeout(observer._t);
     observer._t = setTimeout(() => {
-      $$('.mapPill').forEach(btn => { if (btn.textContent.includes('Maps')) btn.textContent = 'Directions ↗'; });
+      $$('.mapPill').forEach(btn => { if (btn.textContent !== 'Open Maps') btn.textContent = 'Open Maps'; });
       const upcoming = $('#upcoming');
       if (upcoming) [...upcoming.children].slice(2).forEach(x => x.style.display = 'none');
       if (lastPosition) updateDistanceBadges(lastPosition);
