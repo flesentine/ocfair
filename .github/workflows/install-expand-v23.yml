@@ -1,0 +1,58 @@
+name: Install Expanded Fair V23
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/install-expand-v23.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate V23 JavaScript
+        run: node --check expand-v23.js
+      - name: Wire V23
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('<title>Fair Night — Stable Maps V22</title>','<title>Fair Night — Expanded V23</title>',1)
+          if 'expand-v23.js' not in s:
+              marker='<script src="./ux-v21.js?v=21"></script>'
+              if marker not in s:
+                  raise SystemExit('V21 script marker missing')
+              s=s.replace(marker, marker+'\n<script src="./expand-v23.js?v=23"></script>',1)
+          if 'expand-v23.js?v=23' not in s:
+              raise SystemExit('V23 script missing')
+          if '28799441' in s or '465873631' in s:
+              raise SystemExit('Private Etix credentials detected')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Validate app JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf-8')
+          blocks=re.findall(r'<script(?: [^>]*)?>(.*?)</script>',s,re.S)
+          inline=[b for b in blocks if b.strip()]
+          Path('/tmp/app.js').write_text(max(inline,key=len),encoding='utf-8')
+          PY
+          node --check /tmp/app.js
+      - name: Commit V23
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Expand activities and shows V23'
+          git push origin HEAD:main
