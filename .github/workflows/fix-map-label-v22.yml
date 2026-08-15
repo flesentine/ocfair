@@ -1,0 +1,65 @@
+name: Fix map label flicker V22
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/fix-map-label-v22.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Remove competing map-label writer
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('nearby-v18.js')
+          s = p.read_text(encoding='utf-8')
+
+          # Keep a single canonical label everywhere. More importantly, the
+          # old observer must stop rewriting Open Maps back to Directions.
+          s = s.replace('>Directions ↗</button>', '>Open Maps</button>')
+          s = s.replace("btn.textContent = 'Directions ↗';", "btn.textContent = 'Open Maps';")
+          s = s.replace("$$('.mapPill').forEach(btn => { if (btn.textContent.includes('Maps')) btn.textContent = 'Open Maps'; });", "$$('.mapPill').forEach(btn => { if (btn.textContent !== 'Open Maps') btn.textContent = 'Open Maps'; });")
+
+          if 'Directions ↗' in s:
+              raise SystemExit('Competing Directions label still present in nearby-v18.js')
+
+          p.write_text(s, encoding='utf-8')
+
+          # Force Safari/Home Screen installs to fetch the corrected file.
+          p = Path('index.html')
+          h = p.read_text(encoding='utf-8')
+          h = re.sub(r'nearby-v18\.js\?v=\d+', 'nearby-v18.js?v=22', h)
+          h = h.replace('<title>Fair Night — Refined UX V21</title>', '<title>Fair Night — Stable Maps V22</title>')
+          if 'nearby-v18.js?v=22' not in h:
+              raise SystemExit('Could not bump nearby JS cache key')
+          if '28799441' in h or '465873631' in h:
+              raise SystemExit('Private Etix credentials detected')
+          p.write_text(h, encoding='utf-8')
+          PY
+
+      - name: Validate JavaScript
+        run: |
+          node --check nearby-v18.js
+          node --check ux-v20.js
+          node --check ux-v21.js
+
+      - name: Commit fix
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add nearby-v18.js index.html
+          git commit -m 'Stop map button label flicker V22'
+          git push origin HEAD:main
